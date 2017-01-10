@@ -9,8 +9,77 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="tratrafe2.condiom.tambu.MainActivity">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wrong"
+        android:id="@+id/button"
+        android:layout_marginBottom="51dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CORRECT"
+        android:id="@+id/button2"
+        android:layout_alignTop="@+id/button3"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SKIP"
+        android:id="@+id/button3"
+        android:layout_alignTop="@+id/button"
+        android:layout_centerHorizontal="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="MAIN WORD"
+        android:id="@+id/txtMain"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WORD1"
+        android:id="@+id/txt1"
+        android:layout_above="@+id/txt2"
+        android:layout_alignLeft="@+id/txt2"
+        android:layout_alignStart="@+id/txt2"
+        android:layout_marginBottom="35dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WORD2"
+        android:id="@+id/txt2"
+        android:layout_above="@+id/txt3"
+        android:layout_alignLeft="@+id/txt3"
+        android:layout_alignStart="@+id/txt3"
+        android:layout_marginBottom="34dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WORD3"
+        android:id="@+id/txt3"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/txt4"
+        android:layout_alignStart="@+id/txt4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WORD4"
+        android:id="@+id/txt4"
+        android:layout_above="@+id/button3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp" />
 </RelativeLayout>
