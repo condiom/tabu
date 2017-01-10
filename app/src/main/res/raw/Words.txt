@@ -86,7 +86,7 @@ Japan
 Country
 Asia
 Cherry Blossom
- Sushi
+Sushi
 Tokyo
 New York
 City
@@ -826,7 +826,7 @@ Duck
 bird
 yellow
 chicken
-�quack�
+"quack"
 food
 Dragonfly
 Red
