@@ -25,7 +25,7 @@ public class Card {
         apagorevmenes = new String[4];
     }
 
-    public Card[] initArray(Context c) {
+    public static Card[] initArray(Context c) {
         Scanner sc = null;
         try {
             sc = new Scanner(c.getResources().openRawResource(R.raw.words));
