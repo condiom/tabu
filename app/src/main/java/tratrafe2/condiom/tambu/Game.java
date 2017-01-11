@@ -10,9 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Scanner;
-
-public class MainActivity extends Activity {
+public class Game extends Activity {
     TextView timer;
     TextView txt1;
     TextView txt2;
@@ -36,7 +34,7 @@ public class MainActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
 
         initializeViews();
         initializeVariables();
@@ -235,4 +233,11 @@ public class MainActivity extends Activity {
 
     }
 
+    /**
+     * Return to main menu
+     *
+     */
+    public void exitClick(View v){
+    finish();
+    }
 }

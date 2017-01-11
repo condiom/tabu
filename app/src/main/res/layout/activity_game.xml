@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="tratrafe2.condiom.tambu.MainActivity">
+    tools:context="tratrafe2.condiom.tambu.Game">
 
     <LinearLayout
         android:orientation="vertical"
@@ -146,51 +146,51 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.32">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:text="Wrong"
-                android:onClick="WrongClick"
-                android:layout_weight="1"
-                android:id="@+id/btnWrong"
-                style="@style/Widget.AppCompat.Button.Small" />
-
-            <Button
-                android:id="@+id/btnSkip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SKIP"
-                android:onClick="SkipClick"
-                android:layout_alignBaseline="@+id/wrongBtn"
-                android:layout_alignBottom="@+id/wrongBtn"
-                android:layout_centerHorizontal="true"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/btnCorrect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/btnSkip"
-                android:text="CORRECT"
-                android:onClick="CorrectClick"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-
-        <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.32">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:text="Wrong"
+                    android:onClick="WrongClick"
+                    android:layout_weight="1"
+                    android:id="@+id/btnWrong"
+                    style="@style/Widget.AppCompat.Button.Small" />
+
+                <Button
+                    android:id="@+id/btnSkip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SKIP"
+                    android:onClick="SkipClick"
+                    android:layout_alignBaseline="@+id/wrongBtn"
+                    android:layout_alignBottom="@+id/wrongBtn"
+                    android:layout_centerHorizontal="true"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btnCorrect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/btnSkip"
+                    android:text="CORRECT"
+                    android:onClick="CorrectClick"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
             <Button
                 android:text="Start"
@@ -198,6 +198,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btnStart"
                 android:onClick="StartClick" />
+
+            <Button
+                android:text="Exit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnExit"
+                android:onClick="exitClick" />
+
         </LinearLayout>
 
     </LinearLayout>
