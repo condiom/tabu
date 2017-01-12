@@ -21,4 +21,7 @@ public class MainMenu extends Activity {
         Intent intent = new Intent(this, Settings.class);
         startActivity(intent);
     }
+    public void Exit(View v){
+       finish();
+    }
 }
