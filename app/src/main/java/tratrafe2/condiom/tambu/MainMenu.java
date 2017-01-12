@@ -16,4 +16,9 @@ public class MainMenu extends Activity {
         Intent intent = new Intent(this, Game.class);
         startActivity(intent);
     }
+
+    public void SettingsMenu(View v){
+        Intent intent = new Intent(this, Settings.class);
+        startActivity(intent);
+    }
 }

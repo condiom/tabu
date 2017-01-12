@@ -1,6 +1,8 @@
 package tratrafe2.condiom.tambu;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,31 +13,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Game extends Activity {
-    TextView timer;
-    TextView txt1;
-    TextView txt2;
-    TextView txt3;
-    TextView txt4;
-    TextView txtMain;
-    TextView txtScore1;
-    TextView txtScore2;
-    TextView lblScore1;
-    TextView lblScore2;
-    Button btnStart;
-    Button btnWrong;
-    Button btnSkip;
-    Button btnCorrect;
-    int t1Score;
-    int t2Score;
-    int teamPlaying;
+    TextView timer,txt1, txt2,txt3, txt4,txtMain, txtScore1,txtScore2,lblScore1,lblScore2;
+    Button btnStart, btnWrong,btnSkip,btnCorrect;
+    int t1Score, t2Score, teamPlaying,currentCard,realTime,NumOfTeams,wrongPoints,skipPoints,goal,rounds;
+    boolean radio;
     Card[] cardArray;
-    int currentCard;
-    @Override
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+
+        getValues();
         initializeViews();
         initializeVariables();
 
@@ -43,6 +33,18 @@ public class Game extends Activity {
 
         //TODO: na valoume on button click, na ginete random ena i j na kali tin printCard
         printCard(cardArray, currentCard);
+    }
+
+
+    public void getValues(){
+        SharedPreferences sharedPref=getSharedPreferences("userSettings", Context.MODE_PRIVATE);
+        realTime=sharedPref.getInt("realTime",realTime);
+        NumOfTeams=sharedPref.getInt("teams",NumOfTeams);
+        wrongPoints=sharedPref.getInt("wrong",wrongPoints);
+        skipPoints =sharedPref.getInt("skip",skipPoints);
+        goal=sharedPref.getInt("goal",goal);
+        rounds=sharedPref.getInt("rounds",rounds);
+        radio=sharedPref.getBoolean("radio",radio);
     }
 
     /**
@@ -55,7 +57,7 @@ public class Game extends Activity {
         txt2 = (TextView) findViewById(R.id.txt2);
         txt3 = (TextView) findViewById(R.id.txt3);
         txt4 = (TextView) findViewById(R.id.txt4);
-        timer = (TextView) findViewById(R.id.timer);
+        timer = (TextView) findViewById(R.id.txtTimer);
         txtMain = (TextView) findViewById(R.id.txtMain);
         txtScore1 = (TextView) findViewById(R.id.txtScore1);
         txtScore2 = (TextView) findViewById(R.id.txtScore2);
@@ -82,6 +84,8 @@ public class Game extends Activity {
         lblScore2.setTextSize(sizeOfLetters);
         txt3.setGravity(Gravity.CENTER_HORIZONTAL);
         oldColors =  txt1.getTextColors(); //save original colors
+
+        timer.setText(String.format("%d:%03d", realTime, 0));
         updateScores();
     }
 
@@ -93,8 +97,9 @@ public class Game extends Activity {
         t2Score=0;
         // alasi tin to StartClick() etsi proti pezi i omada 1
         teamPlaying=2;
-        currentCard=50;
+        currentCard=50;//TODO na gini random
     }
+
     /**
      * Tiponi ta periexomena tis kartas [i] pou ton pinaka cardArray.
      * isos nan kalitera o pinakas nan lista.
@@ -156,25 +161,29 @@ public class Game extends Activity {
     }
     /**
      * Epilogi tis epomenis kartas
-     * prepi na aferume tis kartes pu epextikan ke na elexume an tis eperasame ules
+     * //TODO prepi na aferume tis kartes pu epextikan ke na elexume an tis eperasame ules
      * ke na kamume reset
      */
     public void selectNewCard(){
-
         currentCard=(int)(Math.random()*cardArray.length);
-
         printCard(cardArray, currentCard);
     }
     /**
      * Wrong Click
-     * plin 1 to score tis omadas pu pezi
-     * analoga me ta settings alasumeta meta
      */
     public void WrongClick(View v) {
         if(teamPlaying==1)
-            t1Score--;
-        else
-            t2Score--;
+            if(wrongPoints==0){
+                t1Score--;
+            }else if(wrongPoints==2){
+                t2Score++;
+            }
+        if(teamPlaying==2)
+            if(wrongPoints==0){
+                t2Score--;
+            }else if(wrongPoints==2){
+                t1Score++;
+            }
         if(t1Score<0)
             t1Score=0;
         if(t2Score<0)
@@ -184,21 +193,26 @@ public class Game extends Activity {
     }
     /**
      * Skip Click
-     * plin 1 to score tis omadas pu pezi
-     * analoga me ta settings alasumeta meta
      */
     public void SkipClick(View v) {
         if(teamPlaying==1)
-            t1Score--;
-        else
-            t2Score--;
+            if(skipPoints==0){
+                t1Score--;
+            }else if(skipPoints==2){
+                t2Score++;
+            }
+        if(teamPlaying==2)
+            if(skipPoints==0){
+                t2Score--;
+            }else if(skipPoints==2){
+                t1Score++;
+            }
         if(t1Score<0)
             t1Score=0;
         if(t2Score<0)
             t2Score=0;
         updateScores();
         selectNewCard();
-
     }
     /**
      * Correct Click
@@ -225,7 +239,7 @@ public class Game extends Activity {
         else
             teamPlaying=1;
         selectNewCard();
-        startCounter(60);
+        startCounter(realTime);
         btnStart.setEnabled(false);
         btnCorrect.setEnabled(true);
         btnWrong.setEnabled(true);

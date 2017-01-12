@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="135dp"
+            android:layout_height="match_parent"
+            android:id="@+id/txtTeams"
+            android:textSize="18sp"
+            android:layout_weight="1.03"
+            android:textAlignment="viewStart" />
+
+        <SeekBar
+            style="@android:style/Widget.SeekBar"
+            android:layout_width="198dp"
+            android:layout_height="match_parent"
+            android:max="4"
+            android:progress="0"
+            android:id="@+id/btnTeams" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04">
+
+        <TextView
+            android:layout_width="189dp"
+            android:layout_height="match_parent"
+            android:id="@+id/txtTimes"
+            android:textSize="18sp"
+            android:textAlignment="viewStart" />
+
+        <SeekBar
+            style="@android:style/Widget.SeekBar"
+            android:layout_width="198dp"
+            android:layout_height="match_parent"
+            android:max="6"
+            android:progress="2"
+            android:id="@+id/btnTime"
+            android:elevation="0dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:text=" Points System:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtPoints"
+        android:textSize="18sp"
+        android:layout_weight="0.04"
+        android:textStyle="normal|bold" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04">
+
+        <TextView
+            android:layout_width="185dp"
+            android:layout_height="match_parent"
+            android:id="@+id/txtWrong"
+            android:textSize="18sp"
+            android:textAlignment="viewStart" />
+
+        <SeekBar
+            style="@android:style/Widget.SeekBar"
+            android:layout_width="190dp"
+            android:layout_height="match_parent"
+            android:max="2"
+            android:progress="1"
+            android:id="@+id/btnWrongPoints" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04">
+
+        <TextView
+            android:layout_width="184dp"
+            android:layout_height="match_parent"
+            android:id="@+id/txtSkip"
+            android:textSize="18sp"
+            android:textAlignment="viewStart" />
+
+        <SeekBar
+            style="@android:style/Widget.SeekBar"
+            android:layout_width="196dp"
+            android:layout_height="match_parent"
+            android:max="2"
+            android:progress="1"
+            android:id="@+id/btnSkipPoints" />
+
+    </LinearLayout>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04" >
+
+        <RadioButton
+            android:text="Max Rounds:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnRounds"
+            android:duplicateParentState="false"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:checked="false"
+            android:onClick="onRadioButtonClicked" />
+
+        <RadioButton
+            android:text=" Goal Points:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnGoal"
+            android:checked="false"
+            android:duplicateParentState="false"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:onClick="onRadioButtonClicked" />
+
+    </RadioGroup>
+
+    <Button
+        android:text="Exit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnExit"
+        android:layout_weight="0.04"
+        android:onClick="exitClickS" />
+
+</LinearLayout>
