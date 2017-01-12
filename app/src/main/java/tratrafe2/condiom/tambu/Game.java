@@ -202,6 +202,12 @@ public class Game extends Activity {
     /**
      * Wrong Click
      */
+    /*
+    esvisa ta gt en 8a edulefkan me poles omades
+    ke ekama aplos na aferun 1
+    */
+    // TODO prepi na ginun implement me tis poles omades vasi ton settings
+
     public void WrongClick(View v) {
         Scores[teamPlaying]--;
         if(Scores[teamPlaying]<0){
