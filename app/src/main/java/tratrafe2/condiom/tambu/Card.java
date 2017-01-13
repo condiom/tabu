@@ -25,10 +25,10 @@ public class Card {
         apagorevmenes = new String[5];
     }
 
-    public static Card[] initArray(Context c) {
+    public static Card[] initArray(Context c,int file) {
         Scanner sc = null;
         try {
-            sc = new Scanner(c.getResources().openRawResource(R.raw.words_gr));
+            sc = new Scanner(c.getResources().openRawResource(file));
         } catch (Exception e) {
         }
         int number=Integer.parseInt(sc.nextLine())-1;

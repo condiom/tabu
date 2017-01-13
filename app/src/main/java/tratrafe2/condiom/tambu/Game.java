@@ -18,12 +18,12 @@ import android.widget.TextView;
 public class Game extends Activity {
     float sizeOfLetters;
     LinearLayout llTeamNames, llTeamScores;
-    TextView timer, txt1, txt2, txt3, txt4,txt5, txtMain;
+    TextView timer, txt1, txt2, txt3, txt4, txt5, txtMain;
     Button btnStart, btnWrong, btnSkip, btnCorrect;
     int Scores[];
     TextView teamNames[], teamScores[];
     int teamPlaying, currentCard, realTime, NumOfTeams, wrongPoints, skipPoints, goal, rounds, index;
-    int debug=0;
+    int debug = 0;
     boolean radio;
     Card[] cardArray;
 
@@ -36,7 +36,7 @@ public class Game extends Activity {
         initializeViews();
         initializeVariables();
 
-        cardArray = Card.initArray(this);
+        cardArray = Card.initArray(this,R.raw.words_gr);
         index = cardArray.length - 1;
     }
 
@@ -187,14 +187,14 @@ public class Game extends Activity {
      * otan to index gini -1, perni tin arxiki tou timi (sizeofarray)
      */
     public void selectNewCard() {
-       currentCard = (int) (Math.random() * index);
+        currentCard = (int) (Math.random() * index);
         printCard(cardArray, currentCard);
-       Card temp = cardArray[index];
+        Card temp = cardArray[index];
         cardArray[index] = cardArray[currentCard];
         cardArray[currentCard] = temp;
         index--;
         if (index == -1)
-        index = cardArray.length - 1;
+            index = cardArray.length - 1;
 
     }
 
@@ -204,38 +204,40 @@ public class Game extends Activity {
     public void WrongClick(View v) {
         if (wrongPoints == 0) {
             Scores[teamPlaying]--;
-        } else if (wrongPoints == 2){
-            for(int i=0;i<Scores.length;i++){
-                if(i!=teamPlaying){
+        } else if (wrongPoints == 2) {
+            for (int i = 0; i < Scores.length; i++) {
+                if (i != teamPlaying) {
                     Scores[i]++;
                 }
             }
         }
-        if(Scores[teamPlaying]<0){
-            Scores[teamPlaying]=0;
+        if (Scores[teamPlaying] < 0) {
+            Scores[teamPlaying] = 0;
         }
         updateScores();
         selectNewCard();
     }
+
     /**
      * Skip Click
      */
     public void SkipClick(View v) {
         if (skipPoints == 0) {
             Scores[teamPlaying]--;
-        } else if (skipPoints == 2){
-            for(int i=0;i<Scores.length;i++){
-                if(i!=teamPlaying){
+        } else if (skipPoints == 2) {
+            for (int i = 0; i < Scores.length; i++) {
+                if (i != teamPlaying) {
                     Scores[i]++;
                 }
             }
         }
-        if(Scores[teamPlaying]<0){
-            Scores[teamPlaying]=0;
+        if (Scores[teamPlaying] < 0) {
+            Scores[teamPlaying] = 0;
         }
         updateScores();
         selectNewCard();
     }
+
     /**
      * Correct Click
      */
@@ -248,11 +250,10 @@ public class Game extends Activity {
     /**
      * Start Click
      * start next team's timer
-     *
      */
     public void StartClick(View v) {
         teamPlaying++;
-        teamPlaying=teamPlaying%NumOfTeams;
+        teamPlaying = teamPlaying % NumOfTeams;
 
         selectNewCard();
         startCounter(realTime);
@@ -265,9 +266,8 @@ public class Game extends Activity {
 
     /**
      * Return to main menu
-     *
      */
-    public void exitClick(View v){
-    finish();
+    public void exitClick(View v) {
+        finish();
     }
 }
