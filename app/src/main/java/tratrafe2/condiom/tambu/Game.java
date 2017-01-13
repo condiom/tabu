@@ -13,10 +13,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Game extends Activity {
-    TextView timer,txt1, txt2,txt3, txt4,txtMain, txtScore1,txtScore2,lblScore1,lblScore2;
+    TextView timer,txt1, txt2,txt3, txt4,txt5,txtMain, txtScore1,txtScore2,lblScore1,lblScore2;
     Button btnStart, btnWrong,btnSkip,btnCorrect;
     int t1Score, t2Score, teamPlaying,currentCard,realTime,NumOfTeams,wrongPoints,skipPoints,goal,rounds;
     boolean radio;
+    int indexLast;
     Card[] cardArray;
 
     @Override
@@ -30,9 +31,8 @@ public class Game extends Activity {
         initializeVariables();
 
         cardArray = Card.initArray(this);
+        indexLast=cardArray.length-1;
 
-        //TODO: na valoume on button click, na ginete random ena i j na kali tin printCard
-        printCard(cardArray, currentCard);
     }
 
 
@@ -57,6 +57,7 @@ public class Game extends Activity {
         txt2 = (TextView) findViewById(R.id.txt2);
         txt3 = (TextView) findViewById(R.id.txt3);
         txt4 = (TextView) findViewById(R.id.txt4);
+        txt5 = (TextView) findViewById(R.id.txt5);
         timer = (TextView) findViewById(R.id.txtTimer);
         txtMain = (TextView) findViewById(R.id.txtMain);
         txtScore1 = (TextView) findViewById(R.id.txtScore1);
@@ -77,6 +78,7 @@ public class Game extends Activity {
         txt2.setTextSize(sizeOfLetters);
         txt3.setTextSize(sizeOfLetters);
         txt4.setTextSize(sizeOfLetters);
+        txt5.setTextSize(sizeOfLetters);
         timer.setTextSize(sizeOfLetters);
         txtScore1.setTextSize(sizeOfLetters);
         txtScore2.setTextSize(sizeOfLetters);
@@ -97,7 +99,6 @@ public class Game extends Activity {
         t2Score=0;
         // alasi tin to StartClick() etsi proti pezi i omada 1
         teamPlaying=2;
-        currentCard=50;//TODO na gini random
     }
 
     /**
@@ -120,6 +121,7 @@ public class Game extends Activity {
         txt2.setText(cardArray[i].apagorevmenes[1]);
         txt3.setText(cardArray[i].apagorevmenes[2]);
         txt4.setText(cardArray[i].apagorevmenes[3]);
+        txt5.setText(cardArray[i].apagorevmenes[4]);
     }
 
     /**
@@ -165,8 +167,15 @@ public class Game extends Activity {
      * ke na kamume reset
      */
     public void selectNewCard(){
-        currentCard=(int)(Math.random()*cardArray.length);
+        currentCard=(int)(Math.random()*(indexLast+1));
         printCard(cardArray, currentCard);
+        Card temp=cardArray[indexLast];
+        cardArray[indexLast]=cardArray[currentCard];
+        cardArray[currentCard]=temp;
+        indexLast--;
+        if(indexLast==-1)
+            indexLast=cardArray.length-1;
+
     }
     /**
      * Wrong Click

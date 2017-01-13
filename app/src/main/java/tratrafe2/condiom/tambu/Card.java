@@ -22,7 +22,7 @@ public class Card {
 
     public Card() {
         word = "";
-        apagorevmenes = new String[4];
+        apagorevmenes = new String[5];
     }
 
     public static Card[] initArray(Context c) {
@@ -31,21 +31,26 @@ public class Card {
             sc = new Scanner(c.getResources().openRawResource(R.raw.words));
         } catch (Exception e) {
         }
+        int number=Integer.parseInt(sc.nextLine())-1;
         boolean check=true;
         List<Card> list=new ArrayList<>();
         while(sc.hasNext()){
             Card temp=new Card();
             temp.word=sc.nextLine();
-            for(int i=0;i<4;i++){
+            for(int i=0;i<number;i++){
                 if(sc.hasNext()) {
                     temp.apagorevmenes[i] = sc.nextLine();
                 }else{
                     check=false;
                 }
             }
+            for(int i=number;i<5;i++){
+                temp.apagorevmenes[i]="";
+            }
            if(check)
                list.add(temp);
         }
+
         Card[] array=new Card[list.size()];
         for(int i=0;i<list.size();i++){
             array[i]=list.get(i);
