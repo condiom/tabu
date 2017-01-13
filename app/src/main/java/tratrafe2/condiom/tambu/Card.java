@@ -28,7 +28,7 @@ public class Card {
     public static Card[] initArray(Context c) {
         Scanner sc = null;
         try {
-            sc = new Scanner(c.getResources().openRawResource(R.raw.words));
+            sc = new Scanner(c.getResources().openRawResource(R.raw.words_gr));
         } catch (Exception e) {
         }
         int number=Integer.parseInt(sc.nextLine())-1;
