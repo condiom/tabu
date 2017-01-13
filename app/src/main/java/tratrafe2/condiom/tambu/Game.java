@@ -7,17 +7,24 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Game extends Activity {
-    TextView timer,txt1, txt2,txt3, txt4,txt5,txtMain, txtScore1,txtScore2,lblScore1,lblScore2;
+    float sizeOfLetters;
+    LinearLayout llTeamNames;
+    LinearLayout llTeamScores;
+    TextView timer,txt1, txt2,txt3, txt4,txtMain;
     Button btnStart, btnWrong,btnSkip,btnCorrect;
-    int t1Score, t2Score, teamPlaying,currentCard,realTime,NumOfTeams,wrongPoints,skipPoints,goal,rounds;
+    int Scores[];
+    TextView teamNames[],teamScores[];
+    int teamPlaying,currentCard,realTime,NumOfTeams,wrongPoints,skipPoints,goal,rounds;
     boolean radio;
-    int indexLast;
     Card[] cardArray;
 
     @Override
@@ -30,9 +37,12 @@ public class Game extends Activity {
         initializeViews();
         initializeVariables();
 
-        cardArray = Card.initArray(this);
-        indexLast=cardArray.length-1;
 
+
+        cardArray = Card.initArray(this);
+
+        //TODO: na valoume on button click, na ginete random ena i j na kali tin printCard
+        printCard(cardArray, currentCard);
     }
 
 
@@ -57,48 +67,67 @@ public class Game extends Activity {
         txt2 = (TextView) findViewById(R.id.txt2);
         txt3 = (TextView) findViewById(R.id.txt3);
         txt4 = (TextView) findViewById(R.id.txt4);
-        txt5 = (TextView) findViewById(R.id.txt5);
         timer = (TextView) findViewById(R.id.txtTimer);
         txtMain = (TextView) findViewById(R.id.txtMain);
-        txtScore1 = (TextView) findViewById(R.id.txtScore1);
-        txtScore2 = (TextView) findViewById(R.id.txtScore2);
-        lblScore1 = (TextView) findViewById(R.id.txtTeam1);
-        lblScore2 = (TextView) findViewById(R.id.txtTeam2);
         btnStart = (Button) findViewById(R.id.btnStart);
         btnCorrect = (Button) findViewById(R.id.btnCorrect);
         btnSkip = (Button) findViewById(R.id.btnSkip);
         btnWrong = (Button) findViewById(R.id.btnWrong);
+        llTeamNames=(LinearLayout)findViewById(R.id.llteamNames);
+        llTeamScores=(LinearLayout)findViewById(R.id.llteamScores);
         btnCorrect.setEnabled(false);
         btnWrong.setEnabled(false);
         btnSkip.setEnabled(false);
 
-        float sizeOfLetters = 30;
+        sizeOfLetters = 30;
         txtMain.setTextSize(sizeOfLetters + 15);
         txt1.setTextSize(sizeOfLetters);
         txt2.setTextSize(sizeOfLetters);
         txt3.setTextSize(sizeOfLetters);
         txt4.setTextSize(sizeOfLetters);
-        txt5.setTextSize(sizeOfLetters);
         timer.setTextSize(sizeOfLetters);
-        txtScore1.setTextSize(sizeOfLetters);
-        txtScore2.setTextSize(sizeOfLetters);
-        lblScore1.setTextSize(sizeOfLetters);
-        lblScore2.setTextSize(sizeOfLetters);
         txt3.setGravity(Gravity.CENTER_HORIZONTAL);
         oldColors =  txt1.getTextColors(); //save original colors
 
         timer.setText(String.format("%d:%03d", realTime, 0));
-        updateScores();
+
     }
 
     /**
      * initialise Variables
      */
     public void initializeVariables(){
-        t1Score=0;
-        t2Score=0;
+        Scores=new int[NumOfTeams];
+        teamNames = new TextView[NumOfTeams];
+        teamScores = new TextView[NumOfTeams];
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.weight = 1.0f;
+        lp.gravity=Gravity.CENTER_VERTICAL;
+        for (int i=0;i<NumOfTeams;i++){
+            Scores[i]=0;
+            teamNames[i]= new TextView(this);
+            teamNames[i].setText("Team "+(i+1));
+
+
+            teamScores[i]=new TextView(this);
+            teamScores[i].setText(0+"");
+
+            teamNames[i].setLayoutParams(lp);
+            teamScores[i].setLayoutParams(lp);
+
+            llTeamNames.addView(teamNames[i]);
+            llTeamScores.addView(teamScores[i]);
+
+        }
+
         // alasi tin to StartClick() etsi proti pezi i omada 1
-        teamPlaying=2;
+        teamPlaying=-1;
+        currentCard=50;//TODO na gini random
+        updateScores();
     }
 
     /**
@@ -121,7 +150,6 @@ public class Game extends Activity {
         txt2.setText(cardArray[i].apagorevmenes[1]);
         txt3.setText(cardArray[i].apagorevmenes[2]);
         txt4.setText(cardArray[i].apagorevmenes[3]);
-        txt5.setText(cardArray[i].apagorevmenes[4]);
     }
 
     /**
@@ -144,7 +172,7 @@ public class Game extends Activity {
 
             @Override
             public void onFinish() {
-                timer.setText("TIME'S UP");
+                timer.setText("TIME'S UP\nTEAM "+(((teamPlaying+1)%NumOfTeams)+1)+" PLAY'S");
                 btnStart.setEnabled(true);
                 btnCorrect.setEnabled(false);
                 btnWrong.setEnabled(false);
@@ -158,8 +186,9 @@ public class Game extends Activity {
 
      */
     public void updateScores(){
-        txtScore1.setText(t1Score+"");
-        txtScore2.setText(t2Score+"");
+        for (int i=0;i<NumOfTeams;i++){
+            teamScores[i].setText(Scores[i]+"");
+        }
     }
     /**
      * Epilogi tis epomenis kartas
@@ -167,36 +196,23 @@ public class Game extends Activity {
      * ke na kamume reset
      */
     public void selectNewCard(){
-        currentCard=(int)(Math.random()*(indexLast+1));
+        currentCard=(int)(Math.random()*cardArray.length);
         printCard(cardArray, currentCard);
-        Card temp=cardArray[indexLast];
-        cardArray[indexLast]=cardArray[currentCard];
-        cardArray[currentCard]=temp;
-        indexLast--;
-        if(indexLast==-1)
-            indexLast=cardArray.length-1;
-
     }
     /**
      * Wrong Click
      */
+    /*
+    esvisa ta gt en 8a edulefkan me poles omades
+    ke ekama aplos na aferun 1
+    */
+    // TODO prepi na ginun implement me tis poles omades vasi ton settings
+
     public void WrongClick(View v) {
-        if(teamPlaying==1)
-            if(wrongPoints==0){
-                t1Score--;
-            }else if(wrongPoints==2){
-                t2Score++;
-            }
-        if(teamPlaying==2)
-            if(wrongPoints==0){
-                t2Score--;
-            }else if(wrongPoints==2){
-                t1Score++;
-            }
-        if(t1Score<0)
-            t1Score=0;
-        if(t2Score<0)
-            t2Score=0;
+        Scores[teamPlaying]--;
+        if(Scores[teamPlaying]<0){
+            Scores[teamPlaying]=0;
+        }
         updateScores();
         selectNewCard();
     }
@@ -204,22 +220,11 @@ public class Game extends Activity {
      * Skip Click
      */
     public void SkipClick(View v) {
-        if(teamPlaying==1)
-            if(skipPoints==0){
-                t1Score--;
-            }else if(skipPoints==2){
-                t2Score++;
-            }
-        if(teamPlaying==2)
-            if(skipPoints==0){
-                t2Score--;
-            }else if(skipPoints==2){
-                t1Score++;
-            }
-        if(t1Score<0)
-            t1Score=0;
-        if(t2Score<0)
-            t2Score=0;
+        Scores[teamPlaying]--;
+        if(Scores[teamPlaying]<0){
+            Scores[teamPlaying]=0;
+        }
+
         updateScores();
         selectNewCard();
     }
@@ -229,10 +234,7 @@ public class Game extends Activity {
      * analoga me ta settings alasumeta meta
      */
     public void CorrectClick(View v) {
-        if (teamPlaying == 1)
-            t1Score++;
-        else
-            t2Score++;
+        Scores[teamPlaying]++;
         updateScores();
         selectNewCard();
     }
@@ -243,10 +245,9 @@ public class Game extends Activity {
      *
      */
     public void StartClick(View v) {
-        if (teamPlaying == 1)
-            teamPlaying=2;
-        else
-            teamPlaying=1;
+        teamPlaying++;
+        teamPlaying=teamPlaying%NumOfTeams;
+
         selectNewCard();
         startCounter(realTime);
         btnStart.setEnabled(false);

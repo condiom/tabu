@@ -20,47 +20,14 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/llteamNames"></LinearLayout>
 
-            <TextView
-                android:text="Team 1:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/txtTimer"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:id="@+id/txtTeam1"
-                android:layout_weight="1" />
-
-            <TextView
-                android:text="Scr1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtScore1"
-                android:layout_alignParentTop="true"
-                android:layout_alignRight="@+id/wrongBtn"
-                android:layout_alignEnd="@+id/wrongBtn"
-                android:layout_weight="1" />
-
-            <TextView
-                android:text="Team2:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/txtTimer"
-                android:layout_alignLeft="@+id/btnCorrect"
-                android:layout_alignStart="@+id/btnCorrect"
-                android:id="@+id/txtTeam2"
-                android:layout_weight="1" />
-
-            <TextView
-                android:text="Scr2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/txtTeam2"
-                android:layout_toEndOf="@+id/txtTeam2"
-                android:id="@+id/txtScore2"
-                android:layout_weight="1" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/llteamScores">
 
         </LinearLayout>
 

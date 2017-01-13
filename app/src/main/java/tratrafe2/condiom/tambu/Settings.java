@@ -53,7 +53,9 @@ public class Settings extends Activity {
         txtTeams.setText("Number of Teams: " + (teamsBar.getProgress() + 2));
         timeBar.setProgress(timeProgr);
         if(timeBar.getProgress()==0){
-            realTime=30;
+           // realTime=30;
+           // just fo testing
+            realTime=10;
         }else{
             realTime=((timeBar.getProgress() * 30)+30);
         }
@@ -185,7 +187,7 @@ public class Settings extends Activity {
 
         editor.putInt("realTime",realTime);//done
         editor.putInt("timeProgr",timeProgr);//done
-        editor.putInt("teams",teams);//done
+        editor.putInt("teams",teams+2);//done
         editor.putInt("wrong",wrong);//done
         editor.putInt("skip",skip);//done
         editor.putInt("goal",goal);
