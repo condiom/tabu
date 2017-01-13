@@ -53,6 +53,7 @@ public class Settings extends Activity {
         txtTeams.setText("Number of Teams: " + (teamsBar.getProgress() + 2));
         timeBar.setProgress(timeProgr);
         if(timeBar.getProgress()==0){
+            //TODO
            // realTime=30;
            // just fo testing
             realTime=10;

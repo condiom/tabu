@@ -93,8 +93,7 @@ New York
 City
 America
 Big Apple
-Statue of
-Liberty
+Statue of Liberty
 Husband
 Wife
 Ring
@@ -401,8 +400,7 @@ Dress
 White
 married
 Clothes
-SPECIAL
-Girls
+SPECIAL Girls
 Kung Fu Panda
 Movie
 China
@@ -973,14 +971,13 @@ England
 Europe
 Capital
 U.K.
-Paris, France
+Paris
+France
 Romance
 Shopping
-Eiffel
-Tower
+Eiffel Tower
 French
-Exchange
-Student
+Exchange Student
 Travel
 Study
 Abroad
