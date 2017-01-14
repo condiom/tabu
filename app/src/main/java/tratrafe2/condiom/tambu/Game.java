@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Game extends Activity {
+    final int MAXTEAMS = 6;
     float sizeOfLetters;
     LinearLayout llTeamNames, llTeamScores;
     TextView timer, txt1, txt2, txt3, txt4, txt5, txtMain;
@@ -26,6 +27,7 @@ public class Game extends Activity {
     int debug = 0;
     boolean radio;
     Card[] cardArray;
+    String teamNamesStr[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,14 @@ public class Game extends Activity {
         goal = sharedPref.getInt("goal", goal);
         rounds = sharedPref.getInt("rounds", rounds);
         radio = sharedPref.getBoolean("radio", radio);
+        teamNamesStr=new String[MAXTEAMS];
+        for(int i=0;i<MAXTEAMS;i++){
+
+          teamNamesStr[i]=sharedPref.getString("team"+i, "");
+           if(teamNamesStr[i].compareTo("")==0){
+              teamNamesStr[i]="team "+i;
+           }
+       }
     }
 
     /**
@@ -87,8 +97,14 @@ public class Game extends Activity {
         txt3.setGravity(Gravity.CENTER_HORIZONTAL);
         oldColors = txt1.getTextColors(); //save original colors
 
-        timer.setText(String.format("%d:%03d", realTime, 0));
-
+        //timer.setText(String.format("%d:%03d", realTime, 0));
+        timer.setText(teamNamesStr[0]+" PLAYS");
+        txt1.setText("");
+        txt2.setText("");
+        txt3.setText("");
+        txt4.setText("");
+        txt5.setText("");
+        txtMain.setText("");
     }
 
     /**
@@ -98,19 +114,13 @@ public class Game extends Activity {
         Scores = new int[NumOfTeams];
         teamNames = new TextView[NumOfTeams];
         teamScores = new TextView[NumOfTeams];
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int height = displaymetrics.heightPixels;
-        int width = displaymetrics.widthPixels;
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.weight = 1.0f;
         lp.gravity = Gravity.CENTER_VERTICAL;
         for (int i = 0; i < NumOfTeams; i++) {
             Scores[i] = 0;
             teamNames[i] = new TextView(this);
-            teamNames[i].setText("Team " + (i + 1));
-
-
+            teamNames[i].setText(teamNamesStr[i]);
             teamScores[i] = new TextView(this);
             teamScores[i].setText(0 + "");
 
@@ -163,7 +173,7 @@ public class Game extends Activity {
 
             @Override
             public void onFinish() {
-                timer.setText("TIME'S UP\nTEAM " + (((teamPlaying + 1) % NumOfTeams) + 1) + " PLAYS");
+                timer.setText("TIME'S UP\n " + teamNamesStr[(teamPlaying + 1) % NumOfTeams] + " PLAYS");
                 btnStart.setEnabled(true);
                 btnCorrect.setEnabled(false);
                 btnWrong.setEnabled(false);
