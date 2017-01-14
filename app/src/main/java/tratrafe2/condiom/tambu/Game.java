@@ -24,17 +24,21 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class Game extends Activity {
     final int MAXTEAMS = 6;
     int MAXFILES = 2;
-    int countFiles = 1;
-    float sizeOfLetters;
+    int countFiles = 0;
+    int teamPlaying = -1; // alasi tin to StartClick() etsi proti pezi i omada 1
+    int debug = 0;
+
+
     LinearLayout llTeamNames, llTeamScores;
     TextView timer, txt1, txt2, txt3, txt4, txt5, txtMain;
-    Button btnStart, btnWrong, btnSkip, btnCorrect;
-    int Scores[];
     TextView teamNames[], teamScores[];
-    int teamPlaying, currentCard, realTime, NumOfTeams, wrongPoints, skipPoints, goal, rounds, index;
-    int debug = 0;
+    Button btnStart, btnWrong, btnSkip, btnCorrect;
+
+    int Scores[];
+    int currentCard, realTime, NumOfTeams, wrongPoints, skipPoints, goal, rounds, index;
+    float sizeOfLetters;
     boolean radio;
-    Card[] cardArray;
+    Card cardArray[];
     String teamNamesStr[];
 
     @Override
@@ -42,19 +46,20 @@ public class Game extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        getValues();
+
+
+        getSettings();
         initializeViews();
         initializeVariables();
 
-        cardArray = Card.initArray(this, R.raw.words1);
-        index = cardArray.length - 1;
+
     }
 
 
-    public void getValues() {
+    public void getSettings() {
         SharedPreferences sharedPref = getSharedPreferences("userSettings", Context.MODE_PRIVATE);
         realTime = sharedPref.getInt("realTime", realTime);
-        NumOfTeams = sharedPref.getInt("teams", NumOfTeams);
+        NumOfTeams = sharedPref.getInt("teams", 2);
         wrongPoints = sharedPref.getInt("wrong", wrongPoints);
         skipPoints = sharedPref.getInt("skip", skipPoints);
         goal = sharedPref.getInt("goal", goal);
@@ -65,6 +70,30 @@ public class Game extends Activity {
             teamNamesStr[i] = sharedPref.getString("team" + i, "");
             if (teamNamesStr[i].compareTo("") == 0) {
                 teamNamesStr[i] = "team " + i;
+            }
+        }
+        Scores = new int[NumOfTeams];
+        teamNames = new TextView[NumOfTeams];
+        teamScores = new TextView[NumOfTeams];
+        teamPlaying = sharedPref.getInt("teamPlaying", teamPlaying);
+        MAXFILES = sharedPref.getInt("MAXFILES", MAXFILES);
+        countFiles = sharedPref.getInt("countFiles", countFiles);
+        for (int i = 0; i < NumOfTeams; i++) {
+            Scores[i] = sharedPref.getInt("teamScores" + i, Scores[i]);
+        }
+        index = sharedPref.getInt("index", -5);
+        if (index == -5) {
+            int nextFile = getResources().getIdentifier("words" + (++countFiles), "raw", getPackageName());
+            cardArray = Card.initArray(this, nextFile);
+            index = cardArray.length - 1;
+            return;
+        }else{
+            cardArray = new Card[index+1];
+            Gson gson = new Gson();
+            for (int i = 0; i <= index; i++) {
+                String json = sharedPref.getString("cardArray" + i, "");
+                Card obj = (Card) gson.fromJson(json, Card.class);
+                cardArray[i] = obj;
             }
         }
     }
@@ -118,18 +147,14 @@ public class Game extends Activity {
      * initialise Variables
      */
     public void initializeVariables() {
-        Scores = new int[NumOfTeams];
-        teamNames = new TextView[NumOfTeams];
-        teamScores = new TextView[NumOfTeams];
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.weight = 1.0f;
         lp.gravity = Gravity.CENTER_VERTICAL;
         for (int i = 0; i < NumOfTeams; i++) {
-            Scores[i] = 0;
             teamNames[i] = new TextView(this);
             teamNames[i].setText(teamNamesStr[i]);
             teamScores[i] = new TextView(this);
-            teamScores[i].setText(0 + "");
+            teamScores[i].setText(Scores[i] + "");
 
             teamNames[i].setLayoutParams(lp);
             teamScores[i].setLayoutParams(lp);
@@ -138,9 +163,6 @@ public class Game extends Activity {
             llTeamScores.addView(teamScores[i]);
 
         }
-
-        // alasi tin to StartClick() etsi proti pezi i omada 1
-        teamPlaying = -1;
         updateScores();
     }
 
@@ -280,7 +302,6 @@ public class Game extends Activity {
     public void StartClick(View v) {
         teamPlaying++;
         teamPlaying = teamPlaying % NumOfTeams;
-
         selectNewCard();
         startCounter(realTime);
         btnStart.setEnabled(false);
@@ -306,6 +327,8 @@ public class Game extends Activity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("MAXFILES", MAXFILES);
         editor.putInt("countFiles", countFiles);
+        editor.putInt("teamPlaying", teamPlaying);
+        editor.putInt("index", index);
         Gson gson = new Gson();
         for (int i = 0; i <= index; i++) {
             String json = gson.toJson(cardArray[i]);

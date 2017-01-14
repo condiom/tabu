@@ -533,12 +533,6 @@ Gills
 River
 Eat
 Catch
-New York
-Statue
-Apple
-City
-America
-Busy
 Train
 Ride
 Travel
