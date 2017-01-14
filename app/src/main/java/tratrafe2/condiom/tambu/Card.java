@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -16,7 +17,7 @@ import java.util.Scanner;
  * Created by tratrafe2 on 11/01/2017.
  */
 
-public class Card {
+public class Card implements Serializable {
     String word;
     String[] apagorevmenes;
 

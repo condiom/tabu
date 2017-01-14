@@ -1,0 +1,61 @@
+6
+Car
+driver
+ride
+transport
+fast
+travel
+Snail
+Round
+Slow
+River
+Eat
+Animal
+Shanghai
+Modern
+Big
+China
+Expo
+Famous
+Soccer
+Ball
+world Cup
+Black
+Sport
+Team
+Cheese
+Yellow
+White
+Pizza
+Food
+Italy
+Dinosaur
+Big
+Animal
+Extinct
+Long Ago
+Reptile
+Japan
+Country
+Asia
+Cherry Blossom
+Sushi
+Tokyo
+New York City
+America
+Big Apple
+Statue of Liberty
+never sleeps
+state
+Husband
+Wife
+Ring
+Marry
+Man
+Friend
+Giraffe
+Tall
+Africa
+Neck
+Long
+Yellow

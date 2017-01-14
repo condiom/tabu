@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Trexi se eclipse, en gia na tsiakariskoume an oules oi le3is mas en diaforetikes
- * DEN tha trexi sto kanoniko app, en gia emas, prin kamoume publish mia lista p lexis
- * //TODO na mporoume na valoume multiple files, gia pio megali lista.
- * Eskeftika na to kamo na tis diagrafi aftomata, alla mpori na iparxi kapou misalign me tis le3is,
- * j na mas diagrapsi le3is p en theloume na diagrapsi.
- * Created by tratrafe2 on 13/01/2017.
+ * Trexi se eclipse, en gia na tsiakariskoume an oules oi le3is mas en
+ * diaforetikes DEN tha trexi sto kanoniko app, en gia emas, prin kamoume
+ * publish mia lista p lexis //TODO na mporoume na valoume multiple files, gia
+ * pio megali lista. Eskeftika na to kamo na tis diagrafi aftomata, alla mpori
+ * na iparxi kapou misalign me tis le3is, j na mas diagrapsi le3is p en theloume
+ * na diagrapsi. Created by tratrafe2 on 13/01/2017.
  ************************************************************************
  ************************************************************************
  ************************************************************************
- ******* Gia na dixni elinikus xaraktires to console tis eclipse*********
- **Piene run->run configurations->common->encoding ke 8kialekse UTF-8****
+ ******* Gia na dixni elinikus xaraktires to console tis eclipse********* Piene
+ * run->run configurations->common->encoding ke 8kialekse UTF-8****
  ************************************************************************
  ************************************************************************
  ************************************************************************
@@ -29,17 +29,16 @@ import java.util.Scanner;
 public class CheckInputs {
 
 	public static void main(String[] args) {
+		String path = "E://Users/GamerMakrides/Documents/Creative stuff/AndroidProjects/tabu/app/src/main/res/raw/words_gr.txt";
 		BufferedReader sc = null;
 		try {
-			File file = new File("words_gr.txt");
-			sc = new BufferedReader(
-					   new InputStreamReader(
-			                      new FileInputStream(file), "UTF8"));
-			//sc = new Scanner(file);
+			File file = new File(path);
+			sc = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
+			// sc = new Scanner(file);
 		} catch (Exception e) {
 			System.out.println("file not found");
 		}
-		int number=0;
+		int number = 0;
 		try {
 			number = Integer.parseInt(sc.readLine()) - 1;
 		} catch (NumberFormatException e1) {
@@ -52,36 +51,34 @@ public class CheckInputs {
 		boolean check = true;
 		List<String> list = new ArrayList<>();
 		try {
-		while (true) {
-			Card temp = new Card();
-			
+			while (true) {
+				Card temp = new Card();
+
 				temp.word = sc.readLine();
-				if(temp.word==null)
+				if (temp.word == null)
 					break;
-			for (int i = 0; i < number; i++) {
-				try{
-					temp.apagorevmenes[i] = sc.readLine();
-				}catch(Exception e)
-				 {
-					check = false;
+				for (int i = 0; i < number; i++) {
+					try {
+						temp.apagorevmenes[i] = sc.readLine();
+					} catch (Exception e) {
+						check = false;
+					}
 				}
+				for (int i = number; i < 5; i++) {
+					temp.apagorevmenes[i] = "";
+				}
+				if (check)
+					list.add(temp.word);
 			}
-			for (int i = number; i < 5; i++) {
-				temp.apagorevmenes[i] = "";
-			}
-			if (check)
-				list.add(temp.word);
-		}
-			}
-		catch (IOException e1) {
+		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		System.out.println(list.toString());
 		list.sort(null);
 		System.out.println(list.toString());
-		for(int i=0;i<list.size()-1;i++){
-			if(list.get(i).equals(list.get(i+1))){
+		for (int i = 0; i < list.size() - 1; i++) {
+			if (list.get(i).equals(list.get(i + 1))) {
 				System.out.println(list.get(i));
 			}
 		}

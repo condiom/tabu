@@ -14,9 +14,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class Game extends Activity {
     final int MAXTEAMS = 6;
+    int MAXFILES = 2;
+    int countFiles = 1;
     float sizeOfLetters;
     LinearLayout llTeamNames, llTeamScores;
     TextView timer, txt1, txt2, txt3, txt4, txt5, txtMain;
@@ -38,7 +46,7 @@ public class Game extends Activity {
         initializeViews();
         initializeVariables();
 
-        cardArray = Card.initArray(this,R.raw.words_gr);
+        cardArray = Card.initArray(this, R.raw.words1);
         index = cardArray.length - 1;
     }
 
@@ -52,14 +60,13 @@ public class Game extends Activity {
         goal = sharedPref.getInt("goal", goal);
         rounds = sharedPref.getInt("rounds", rounds);
         radio = sharedPref.getBoolean("radio", radio);
-        teamNamesStr=new String[MAXTEAMS];
-        for(int i=0;i<MAXTEAMS;i++){
-
-          teamNamesStr[i]=sharedPref.getString("team"+i, "");
-           if(teamNamesStr[i].compareTo("")==0){
-              teamNamesStr[i]="team "+i;
-           }
-       }
+        teamNamesStr = new String[MAXTEAMS];
+        for (int i = 0; i < MAXTEAMS; i++) {
+            teamNamesStr[i] = sharedPref.getString("team" + i, "");
+            if (teamNamesStr[i].compareTo("") == 0) {
+                teamNamesStr[i] = "team " + i;
+            }
+        }
     }
 
     /**
@@ -98,7 +105,7 @@ public class Game extends Activity {
         oldColors = txt1.getTextColors(); //save original colors
 
         //timer.setText(String.format("%d:%03d", realTime, 0));
-        timer.setText(teamNamesStr[0]+" PLAYS");
+        timer.setText(teamNamesStr[0] + " PLAYS");
         txt1.setText("");
         txt2.setText("");
         txt3.setText("");
@@ -139,7 +146,6 @@ public class Game extends Activity {
 
     /**
      * Tiponi ta periexomena tis kartas [i] pou ton pinaka cardArray.
-     * isos nan kalitera o pinakas nan lista.
      *
      * @param cardArray
      * @param i
@@ -194,17 +200,27 @@ public class Game extends Activity {
     /**
      * Epilogi tis epomenis kartas me patenta ston pinaka
      * kathe epilegmeni karta pai sti thesi index k to index mionete kata 1
-     * otan to index gini -1, perni tin arxiki tou timi (sizeofarray)
+     * otan to index gini -1,
+     * //TODO diavazi to epomeno paketoui lexeon
      */
     public void selectNewCard() {
-        currentCard = (int) (Math.random() * index);
+        currentCard = (int) (Math.random() * (index + 1));
         printCard(cardArray, currentCard);
         Card temp = cardArray[index];
         cardArray[index] = cardArray[currentCard];
         cardArray[currentCard] = temp;
         index--;
-        if (index == -1)
+        if (index == -1) {
+            if (countFiles >= MAXFILES) {
+                countFiles = 0;
+                Toast.makeText(this, "Last Card pack is done! Check for updates.", LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Card pack: " + (countFiles) + " is done!", LENGTH_SHORT).show();
+            }
+            int nextFile = getResources().getIdentifier("words" + (++countFiles), "raw", getPackageName());
+            cardArray = Card.initArray(this, nextFile);
             index = cardArray.length - 1;
+        }
 
     }
 
@@ -278,6 +294,26 @@ public class Game extends Activity {
      * Return to main menu
      */
     public void exitClick(View v) {
+        saveValues();
         finish();
+    }
+
+    /**
+     * Saves game to file.
+     */
+    public void saveValues() {
+        SharedPreferences sharedPref = getSharedPreferences("userSettings", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("MAXFILES", MAXFILES);
+        editor.putInt("countFiles", countFiles);
+        Gson gson = new Gson();
+        for (int i = 0; i <= index; i++) {
+            String json = gson.toJson(cardArray[i]);
+            editor.putString("cardArray" + i, json);
+        }
+        for (int i = 0; i < NumOfTeams; i++) {
+            editor.putInt("teamScores" + i, Scores[i]);
+        }
+        editor.commit();
     }
 }
