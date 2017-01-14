@@ -147,6 +147,15 @@
     </RadioGroup>
 
     <Button
+        android:text="Save and Exit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSaveAndExit"
+        android:layout_weight="0.04"
+        android:onClick="saveAndExitClick"
+        tools:text="Save and Exit"/>
+
+    <Button
         android:text="Exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -70,7 +70,8 @@
                 android:gravity="center"
                 android:text="MAIN WORD"
                 android:textSize="20sp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textStyle="normal|bold"/>
 
             <TextView
                 android:id="@+id/txt1"
@@ -133,8 +134,7 @@
                     android:text="Wrong"
                     android:onClick="WrongClick"
                     android:layout_weight="1"
-                    android:id="@+id/btnWrong"
-                    style="@style/Widget.AppCompat.Button.Small" />
+                    android:id="@+id/btnWrong" />
 
                 <Button
                     android:id="@+id/btnSkip"
@@ -166,6 +166,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btnStart"
                 android:onClick="StartClick" />
+
+            <Button
+                android:text="New Game"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnNewGame"
+                android:layout_weight="0.32"
+                android:onClick="newGameClick"/>
 
             <Button
                 android:text="Exit"

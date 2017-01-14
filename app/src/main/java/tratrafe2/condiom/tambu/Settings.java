@@ -1,7 +1,9 @@
 package tratrafe2.condiom.tambu;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
@@ -236,10 +238,11 @@ public class Settings extends Activity {
         editor.putInt("skip",skip);//done
         editor.putInt("goal",goal);
         editor.putInt("rounds",rounds);
-       for(int i=0;i<MAXTEAMS;i++){
+        editor.putBoolean("settingsChanged",true);
+        for(int i=0;i<MAXTEAMS;i++){
           String nameOfTeam=teamNamesInput[i].getText().toString();
         editor.putString("team"+i,nameOfTeam);
-       }
+        }
         editor.putBoolean("radio",radio);//done
         editor.apply();
     }
@@ -266,11 +269,30 @@ public class Settings extends Activity {
     }
 
     /**
-     * Exits settings menu and saves to file.
+     * Exits settings menu
      * @param v
      */
     public void exitClickS(View v){
-        saveValues();
         finish();
     }
+   /**
+    * Exits settings menu and saves to file.
+   * @param v
+   */
+    public void saveAndExitClick(View v){
+       new AlertDialog.Builder(this)
+               .setTitle("Save Settings")
+               .setMessage("If you save settings any open games will be lost")
+               .setIcon(android.R.drawable.ic_dialog_alert)
+               .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+
+                  public void onClick(DialogInterface dialog, int whichButton) {
+                     saveValues();
+                     finish();
+                  }
+               })
+               .setNegativeButton("Don't save", null).show();
+
+    }
+
 }
