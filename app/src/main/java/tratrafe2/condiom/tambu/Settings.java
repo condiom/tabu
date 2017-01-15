@@ -88,7 +88,7 @@ public class Settings extends Activity {
             //TODO
            // realTime=30;
            // just fo testing
-            realTime=10;
+            realTime=12;
         }else{
             realTime=((timeBar.getProgress() * 30)+30);
         }

@@ -1,5 +1,7 @@
 package tratrafe2.condiom.tambu;
 
+import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,16 +9,24 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+
+import java.text.DateFormat;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -31,9 +41,10 @@ public class Game extends Activity {
 
     CountDownTimer cdt;
 
-    LinearLayout llTeamNames, llTeamScores;
+    ProgressBar pbar;
+    LinearLayout llTeamNames, llTeamScores , llindicators;
     TextView timer, txt1, txt2, txt3, txt4, txt5, txtMain;
-    TextView teamNames[], teamScores[];
+    TextView teamNames[], teamScores[],indicators[];
     Button btnStart, btnWrong, btnSkip, btnCorrect, btnNewGame;
 
     int Scores[];
@@ -84,6 +95,7 @@ public class Game extends Activity {
         }
         Scores = new int[NumOfTeams];
         teamNames = new TextView[NumOfTeams];
+        indicators=new TextView[NumOfTeams];
         teamScores = new TextView[NumOfTeams];
         teamPlaying = sharedPref.getInt("teamPlaying", 0);
         MAXFILES = sharedPref.getInt("MAXFILES", 2);
@@ -131,6 +143,7 @@ public class Game extends Activity {
         btnWrong = (Button) findViewById(R.id.btnWrong);
         llTeamNames = (LinearLayout) findViewById(R.id.llteamNames);
         llTeamScores = (LinearLayout) findViewById(R.id.llteamScores);
+        llindicators = (LinearLayout) findViewById(R.id.llindicators);
         btnNewGame = (Button) findViewById(R.id.btnNewGame);
         btnCorrect.setEnabled(false);
         btnWrong.setEnabled(false);
@@ -148,7 +161,7 @@ public class Game extends Activity {
         oldColors = txt1.getTextColors(); //save original colors
 
         //timer.setText(String.format("%d:%03d", realTime, 0));
-        timer.setText(currentTime + " " + teamNamesStr[teamPlaying] + " PLAYS");
+        timer.setText(teamNamesStr[teamPlaying] + "'s turn!");
         txt1.setText("");
         txt2.setText("");
         txt3.setText("");
@@ -159,24 +172,39 @@ public class Game extends Activity {
 
     /**
      * initialise Variables
+     * //TODO me kapio tropo na kamoume ta indicators (rectangles) na exoun to size tou onomatos tis omadas.
      */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void initializeVariables() {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
         lp.weight = 1.0f;
         lp.gravity = Gravity.CENTER_VERTICAL;
         for (int i = 0; i < NumOfTeams; i++) {
+
             teamNames[i] = new TextView(this);
             teamNames[i].setText(teamNamesStr[i]);
+            teamNames[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
             teamScores[i] = new TextView(this);
             teamScores[i].setText(Scores[i] + "");
+            teamScores[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+            indicators[i]=new TextView(this);
+            indicators[i].setBackgroundResource(R.drawable.rectangle_shape);
+            indicators[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            indicators[i].setVisibility(View.INVISIBLE);
 
             teamNames[i].setLayoutParams(lp);
             teamScores[i].setLayoutParams(lp);
+            indicators[i].setLayoutParams(lp);
 
             llTeamNames.addView(teamNames[i]);
             llTeamScores.addView(teamScores[i]);
+            llindicators.addView(indicators[i]);
 
         }
+        indicators[teamPlaying].setVisibility(View.VISIBLE);
         updateScores();
     }
 
@@ -196,21 +224,26 @@ public class Game extends Activity {
     }
 
     /**
-     * Metritis pros ta katw arxizontas p to minutes.
+     * Metritis pros ta katw arxizontas p to seconds.
      *
      * @param minutes
      */
     int currentTime = 0;
 
-    public void startCounter(int minutes) {
+    public void startCounter(int seconds) {
+        pbar= (ProgressBar) findViewById(R.id.progressBar);
         timer.setTextColor(oldColors);
-        cdt = new CountDownTimer(minutes * 1000, 10) {
+        pbar.setVisibility(View.VISIBLE);
+        cdt = new CountDownTimer(seconds * 1000, 10) {
                     @Override
                     public void onTick(long milisUntilFinished) {
-                        timer.setText(milisUntilFinished / 1000 + " " + teamNamesStr[teamPlaying] + " PLAYS");
+                       pbar.setProgress((pbar.getProgress()+1)%60);
                         if (milisUntilFinished / 1000 <= 10) {
+                            pbar.setVisibility(View.INVISIBLE);
                             timer.setTextColor(Color.RED);
-
+                            timer.setText(String.format("%d:%03d", milisUntilFinished / 1000, milisUntilFinished % 1000));
+                        }else{
+                            timer.setText(milisUntilFinished / 1000 + "");
                         }
                         currentTime = (int) (milisUntilFinished / 1000);
                     }
@@ -218,7 +251,7 @@ public class Game extends Activity {
                     @Override
                     public void onFinish() {
                         teamPlaying = (teamPlaying + 1) % NumOfTeams;
-                        timer.setText("TIME'S UP " + teamNamesStr[teamPlaying] + " PLAYS");
+
                         btnStart.setEnabled(true);
                         btnCorrect.setEnabled(false);
                         btnWrong.setEnabled(false);
@@ -227,6 +260,31 @@ public class Game extends Activity {
                         btnStart.setText("START");
                         paused=!paused;
                         currentTime = realTime;
+
+                        timer.setText("TIME'S UP");
+                        Animation anim = new AlphaAnimation(0.0f, 1.0f);
+                        anim.setDuration(200); //You can manage the time of the blink with this parameter
+                        anim.setStartOffset(0);
+                        anim.setRepeatMode(Animation.REVERSE);
+                        anim.setRepeatCount(10);
+                        timer.startAnimation(anim);
+                        anim.setAnimationListener(new Animation.AnimationListener(){
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                            }
+                            @Override
+                            public void onAnimationEnd(Animation arg0) {
+                                timer.setTextColor(oldColors);
+                                timer.setText(teamNamesStr[teamPlaying] + "'s turn!");
+                                for(int i=0;i<indicators.length;i++){
+                                    indicators[i].setVisibility(View.INVISIBLE);
+                                }
+                                indicators[teamPlaying].setVisibility(View.VISIBLE);
+                            }
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                            }
+                        });
                     }
                 }.start();
     }
@@ -256,9 +314,9 @@ public class Game extends Activity {
         if (index == -1) {
             if (countFiles >= MAXFILES) {
                 countFiles = 0;
-                Toast.makeText(this, "Last Card pack is done! Check for updates.", LENGTH_LONG).show();
+                //Toast.makeText(this, "Last Card pack is done! Check for updates.", LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Card pack: " + (countFiles) + " is done!", LENGTH_SHORT).show();
+                //Toast.makeText(this, "Card pack: " + (countFiles) + " is done!", LENGTH_SHORT).show();
             }
             int nextFile = getResources().getIdentifier("words" + (++countFiles), "raw", getPackageName());
             cardArray = Card.initArray(this, nextFile);
@@ -337,7 +395,9 @@ public class Game extends Activity {
             btnWrong.setEnabled(false);
             btnSkip.setEnabled(false);
             btnNewGame.setEnabled(true);
+            pbar.setProgress(0);
             cdt.cancel();
+
         }
     }
 
@@ -360,7 +420,12 @@ public class Game extends Activity {
                         txt4.setText("");
                         txt5.setText("");
                         txtMain.setText("");
-                        timer.setText(String.format("%d:%03d", currentTime, 0) + " " + teamNamesStr[teamPlaying] + " PLAYS");
+                        timer.setTextColor(oldColors);
+                        timer.setText(teamNamesStr[teamPlaying] + "'s turn!");
+                        for(int i=0;i<indicators.length;i++){
+                            indicators[i].setVisibility(View.INVISIBLE);
+                        }
+                        indicators[teamPlaying].setVisibility(View.VISIBLE);
                         updateScores();
                     }
                 })
