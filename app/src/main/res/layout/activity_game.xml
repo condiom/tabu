@@ -73,6 +73,11 @@
                 android:layout_weight="1"
                 android:textStyle="normal|bold"/>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
             <TextView
                 android:id="@+id/txt1"
                 android:layout_width="match_parent"
@@ -167,20 +172,29 @@
                 android:id="@+id/btnStart"
                 android:onClick="StartClick" />
 
-            <Button
-                android:text="New Game"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnNewGame"
-                android:layout_weight="0.32"
-                android:onClick="newGameClick"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.32">
 
-            <Button
-                android:text="Exit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnExit"
-                android:onClick="exitClick" />
+                <Button
+                    android:text="New Game"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnNewGame"
+                    android:layout_weight="1"
+                    android:onClick="newGameClick"/>
+
+                <Button
+                    android:text="Exit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnExit"
+                    android:onClick="exitClick"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

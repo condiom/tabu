@@ -31,7 +31,8 @@ public class Settings extends Activity {
     TextView[] teamNames;
     EditText[] teamNamesInput;
     LinearLayout llTeamNames;
-    int realTime,timeProgr,teams,wrong,skip,goal,rounds;
+    int realTime,timeProgr,wrong,skip,goal,rounds;
+    int teams=0;
     boolean radio;
     String teamNamesAr[];
     @Override
@@ -209,7 +210,7 @@ public class Settings extends Activity {
     public void getValues(){
         SharedPreferences sharedPref=getSharedPreferences("userSettings", Context.MODE_PRIVATE);
         timeProgr=sharedPref.getInt("timeProgr",timeProgr);
-        teams=sharedPref.getInt("teams",teams)-2;
+        teams=sharedPref.getInt("teams",2)-2;
         wrong=sharedPref.getInt("wrong",wrong);
         skip =sharedPref.getInt("skip",skip);
         goal=sharedPref.getInt("goal",goal);
