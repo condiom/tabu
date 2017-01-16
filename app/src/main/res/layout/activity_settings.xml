@@ -128,34 +128,100 @@
 
             </LinearLayout>
 
-            <RadioGroup
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.04" >
+                android:layout_weight="0.04">
 
-                <RadioButton
-                    android:text="Max Rounds:"
+                <RadioGroup
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btnRounds"
-                    android:duplicateParentState="false"
-                    android:textSize="18sp"
-                    android:layout_weight="1"
-                    android:checked="false"
-                    android:onClick="onRadioButtonClicked" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.04" >
 
-                <RadioButton
-                    android:text=" Goal Points:"
+                    <RadioButton
+                        android:text="Max Rounds:"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnRounds"
+                        android:duplicateParentState="false"
+                        android:textSize="18sp"
+                        android:layout_weight="2"
+                        android:checked="false"
+                        android:onClick="onRadioButtonClicked" />
+
+                    <RadioButton
+                        android:text="Goal Points:"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnGoal"
+                        android:checked="false"
+                        android:duplicateParentState="false"
+                        android:textSize="18sp"
+                        android:layout_weight="2"
+                        android:onClick="onRadioButtonClicked" />
+
+                </RadioGroup>
+
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btnGoal"
-                    android:checked="false"
-                    android:duplicateParentState="false"
-                    android:textSize="18sp"
-                    android:layout_weight="1"
-                    android:onClick="onRadioButtonClicked" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.04">
 
-            </RadioGroup>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.04"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:text="50"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/txtMaxRounds"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:gravity="center_vertical"/>
+
+                        <SeekBar
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/seekBarMaxRounds"
+                            android:layout_weight="1"
+                            android:max="19"
+                            android:progress="9"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.04"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:text="100"
+                            android:layout_width="105dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/txtGoalPoints"
+                            android:textAlignment="center"
+                            android:gravity="center_vertical"/>
+
+                        <SeekBar
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/seekBarGoalPoints"
+                            android:layout_weight="1"
+                            android:max="39"
+                            android:progress="19"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
 
             <Button
                 android:text="Save and Exit"
