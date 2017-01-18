@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -42,11 +41,9 @@ public class Game extends Activity {
    Button btnStart, btnWrong, btnSkip, btnCorrect, btnNewGame;
 
    int Scores[];
-   int currentCard, realTime, NumOfTeams, wrongPoints, skipPoints, goal, rounds, index, radioInfo;
-   float sizeOfLetters;
-   boolean radio;
+   int currentCard, realTime, NumOfTeams, wrongPoints, skipPoints, goal, rounds, index, mode, maxRounds, goalRounds;
    Card cardArray[];
-   String teamNamesStr[],winingTeam;
+   String teamNamesStr[], winingTeam;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +63,7 @@ public class Game extends Activity {
       for (int i = 0; i < NumOfTeams; i++) {
          Scores[i] = 0;
       }
-      rounds=0;
+      rounds = 0;
    }
 
    public void getSettings() {
@@ -79,9 +76,10 @@ public class Game extends Activity {
       skipPoints = sharedPref.getInt("skip", 0);
       goal = sharedPref.getInt("goal", 50);
       rounds = sharedPref.getInt("rounds", 0);
-      radio = sharedPref.getBoolean("radio", true);
-      radioInfo = sharedPref.getInt("radioInfo", 50);
-      currentTime = sharedPref.getInt("currentTime", realTime);
+      mode = sharedPref.getInt("mode", 0);
+      maxRounds = sharedPref.getInt("maxRounds", 50);
+      goalRounds = sharedPref.getInt("goalRounds", 100);
+      currentTime = sharedPref.getFloat("currentTime", (float) realTime);
       teamNamesStr = new String[MAXTEAMS];
       for (int i = 0; i < MAXTEAMS; i++) {
          teamNamesStr[i] = sharedPref.getString("team" + i, "team " + i);
@@ -144,19 +142,8 @@ public class Game extends Activity {
       btnCorrect.setEnabled(false);
       btnWrong.setEnabled(false);
       btnSkip.setEnabled(false);
-      /*
-      sizeOfLetters = 30;
-      txtMain.setTextSize(sizeOfLetters + 15);
-      txt1.setTextSize(sizeOfLetters);
-      txt2.setTextSize(sizeOfLetters);
-      txt3.setTextSize(sizeOfLetters);
-      txt4.setTextSize(sizeOfLetters);
-      txt5.setTextSize(sizeOfLetters);
-      timer.setTextSize(sizeOfLetters);
-      */
       oldColors = txt1.getTextColors(); //save original colors
 
-      //timer.setText(String.format("%d:%03d", realTime, 0));
       timer.setText(teamNamesStr[teamPlaying] + "'s turn!");
       txt1.setText("");
       txt2.setText("");
@@ -224,13 +211,13 @@ public class Game extends Activity {
     *
     * @param minutes
     */
-   int currentTime = 0;
+   float currentTime = 0;
 
-   public void startCounter(int seconds) {
+   public void startCounter(float seconds) {
       pbar = (ProgressBar) findViewById(R.id.progressBar);
       timer.setTextColor(oldColors);
       pbar.setVisibility(View.VISIBLE);
-      cdt = new CountDownTimer(seconds * 1000, 10) {
+      cdt = new CountDownTimer((int) (seconds * 1000), 10) {
          @Override
          public void onTick(long milisUntilFinished) {
             pbar.setProgress((pbar.getProgress() + 1) % 60);
@@ -241,16 +228,15 @@ public class Game extends Activity {
             } else {
                timer.setText(milisUntilFinished / 1000 + "");
             }
-            currentTime = (int) (milisUntilFinished / 1000);
+            currentTime = (milisUntilFinished / (float)1000);
          }
 
          @Override
          public void onFinish() {
-            if(teamPlaying==NumOfTeams-1){
+            if (teamPlaying == NumOfTeams - 1) {
                rounds++;
-               if(radio)
-               {
-                  if(rounds==radioInfo){
+               if (mode == 0) {
+                  if (rounds >= maxRounds) {
                      gameEnd();
                      return;
                   }
@@ -278,14 +264,14 @@ public class Game extends Activity {
                @Override
                public void onAnimationStart(Animation animation) {
                   btnStart.setEnabled(false);
-
+                  btnStart.setText("START");
                }
 
                @Override
                public void onAnimationEnd(Animation arg0) {
                   btnStart.setEnabled(true);
                   timer.setTextColor(oldColors);
-                  timer.setText(teamNamesStr[teamPlaying] + "'s turn!");
+                  timer.setText("Round " + rounds + ": " + teamNamesStr[teamPlaying] + "'s turn!");
                   for (int i = 0; i < indicators.length; i++) {
                      indicators[i].setVisibility(View.INVISIBLE);
                   }
@@ -299,19 +285,20 @@ public class Game extends Activity {
          }
       }.start();
    }
+
    /**
     * When a team wins
     */
    private void gameEnd() {
-      int max=0;
-      int maxTeam=0;
-      for(int i=0;i<NumOfTeams;i++){
-         if(max<Scores[i]){
-            max=Scores[i];
-            maxTeam=i;
+      int max = 0;
+      int maxTeam = 0;
+      for (int i = 0; i < NumOfTeams; i++) {
+         if (max < Scores[i]) {
+            max = Scores[i];
+            maxTeam = i;
          }
       }
-      winingTeam=teamNamesStr[maxTeam];
+      winingTeam = teamNamesStr[maxTeam];
       resetGame();
       saveValues();
       Intent intent = new Intent(this, End.class);
@@ -323,7 +310,7 @@ public class Game extends Activity {
     */
    public void updateScores() {
       for (int i = 0; i < NumOfTeams; i++) {
-         if(!radio&&Scores[i]>=radioInfo){
+         if (mode == 1 && Scores[i] >= goalRounds) {
             gameEnd();
          }
          teamScores[i].setText(Scores[i] + "");
@@ -414,8 +401,13 @@ public class Game extends Activity {
       if (!paused) {
          paused = !paused;
          selectNewCard();
+
          startCounter(currentTime);
-         btnStart.setText("PAUSE ||");
+         if (currentTime <1) {
+            btnStart.setText("START");
+         } else {
+            btnStart.setText("PAUSE ||");
+         }
          btnCorrect.setEnabled(true);
          btnWrong.setEnabled(true);
          btnSkip.setEnabled(true);
@@ -479,13 +471,13 @@ public class Game extends Activity {
       SharedPreferences sharedPref = getSharedPreferences("userSettings", Context.MODE_PRIVATE);
       SharedPreferences.Editor editor = sharedPref.edit();
       editor.putInt("MAXFILES", MAXFILES);
-      editor.putInt("currentTime", currentTime);
+      editor.putFloat("currentTime", currentTime);
       editor.putInt("countFiles", countFiles);
       editor.putInt("teamPlaying", teamPlaying);
       editor.putInt("index", index);
       editor.putBoolean("settingsChanged", false);
-      editor.putString("winingTeam",winingTeam);
-      editor.putInt("rounds",rounds);
+      editor.putString("winingTeam", winingTeam);
+      editor.putInt("rounds", rounds);
       Gson gson = new Gson();
       for (int i = 0; i <= index; i++) {
          String json = gson.toJson(cardArray[i]);

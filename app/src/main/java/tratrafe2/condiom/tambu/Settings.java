@@ -1,16 +1,11 @@
 package tratrafe2.condiom.tambu;
 
 import android.app.AlertDialog;
-import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,46 +13,45 @@ import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 /**
  * Created by tratrafe2 on 12/01/2017.
  */
 
 public class Settings extends Activity {
+   final int MAXMAXROUNDS=100;
+   final int MAXGOALROUNDS=200;
    final int MAXTEAMS = 6;
    Context that;
-   SeekBar teamsBar, timeBar, wrongBar, skipBar, maxRoundsBar, goalPointsBar;
-   RadioButton btnGoal, btnRounds;
+   /*SeekBar teamsBar, timeBar, wrongBar, skipBar;*/
+   RadioButton btnGoal, btnRounds,btnInfinity;
    TextView txtTeams, txtTime, txtWrong, txtSkip, temp,txtMaxRounds,txtGoalPoints;
    TextView[] teamNames;
    EditText[] teamNamesInput;
    LinearLayout llTeamNames;
-   int radioInfo;
-   int realTime, timeProgr, wrong, skip, goal=50, rounds;
+   int realTime, timeProgr, wrong, skip, goal=50, rounds,maxRounds,goalRounds,mode;
    int teams = 0;
-   boolean radio;
    String teamNamesAr[];
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_settings);
-
+      maxRounds=50;
+      goalRounds=100;
       that = this;
-      //Initializing koumpia
-      //maxRoundsBar = (SeekBar) findViewById(R.id.seekBarMaxRounds);
-      //goalPointsBar = (SeekBar) findViewById(R.id.seekBarGoalPoints);
+      /*
       teamsBar = (SeekBar) findViewById(R.id.btnTeams);
       timeBar = (SeekBar) findViewById(R.id.btnTime);
       wrongBar = (SeekBar) findViewById(R.id.btnWrongPoints);
       skipBar = (SeekBar) findViewById(R.id.btnSkipPoints);
+      */
       txtTeams = (TextView) findViewById(R.id.txtTeams);
       txtTime = (TextView) findViewById(R.id.txtTimes);
       txtWrong = (TextView) findViewById(R.id.txtWrong);
       txtSkip = (TextView) findViewById(R.id.txtSkip);
       btnGoal = (RadioButton) findViewById(R.id.btnGoal);
       btnRounds = (RadioButton) findViewById(R.id.btnRounds);
+      btnInfinity = (RadioButton) findViewById(R.id.btnInfinite);
       txtMaxRounds = (TextView) findViewById(R.id.txtMaxRounds);
       txtGoalPoints = (TextView) findViewById(R.id.txtGoalPoints);
       // For team names textvies and editviews
@@ -73,7 +67,6 @@ public class Settings extends Activity {
       }
 
       //Reading settings from file
-      radio = true;
       getValues();
       temp = new TextView(this);
       temp.setText("Team Names:");
@@ -86,8 +79,33 @@ public class Settings extends Activity {
 
       }
       //Setting settings according to file
-      btnRounds.setChecked(radio);
-      btnGoal.setChecked(!radio);
+      switch (mode){
+         case 0:
+            btnRounds.setChecked(true);
+            btnGoal.setChecked(false);
+            btnInfinity.setChecked(false);
+            break;
+         case 1:
+            btnRounds.setChecked(false);
+            btnGoal.setChecked(true);
+            btnInfinity.setChecked(false);
+            break;
+         case 2:
+            btnRounds.setChecked(false);
+            btnGoal.setChecked(false);
+            btnInfinity.setChecked(true);
+            break;
+         default:
+            btnRounds.setChecked(true);
+            btnGoal.setChecked(false);
+            btnInfinity.setChecked(false);
+            mode=0;
+            break;
+      }
+      txtMaxRounds.setText(String.valueOf(maxRounds));
+      txtGoalPoints.setText(String.valueOf(goalRounds));
+      realTime = 12;
+      /*
       teamsBar.setProgress(teams);
       txtTeams.setText("Number of Teams: " + (teamsBar.getProgress() + 2));
       timeBar.setProgress(timeProgr);
@@ -117,14 +135,8 @@ public class Settings extends Activity {
       } else {
          txtSkip.setText("Skip:    -1   Team");
       }
-      if(radio){
-         txtMaxRounds.setText(radioInfo+"");
-  //       maxRoundsBar.setProgress(radioInfo/5-1);
-      }
-      else {
-         txtGoalPoints.setText(radioInfo+"");
-//         goalPointsBar.setProgress(radioInfo/5-1);
-      }
+
+
       //SeekBars listeners
       teamsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
          @Override
@@ -218,38 +230,7 @@ public class Settings extends Activity {
 
          }
       });
-      /*maxRoundsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-         @Override
-         public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-            txtMaxRounds.setText(maxRoundsBar.getProgress()*5+5+"");
-         }
-
-         @Override
-         public void onStartTrackingTouch(SeekBar seekBar) {
-
-         }
-
-         @Override
-         public void onStopTrackingTouch(SeekBar seekBar) {
-
-         }
-      });
-      goalPointsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-         @Override
-         public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-            txtGoalPoints.setText(goalPointsBar.getProgress()*5+5+"");
-         }
-
-         @Override
-         public void onStartTrackingTouch(SeekBar seekBar) {
-
-         }
-
-         @Override
-         public void onStopTrackingTouch(SeekBar seekBar) {
-
-         }
-      });*/
+   */
    }
 
    /**
@@ -263,16 +244,9 @@ public class Settings extends Activity {
       skip = sharedPref.getInt("skip", skip);
       goal = sharedPref.getInt("goal", goal);
       rounds = sharedPref.getInt("rounds", rounds);
-      radio = sharedPref.getBoolean("radio", true);
-      radioInfo = sharedPref.getInt("radioInfo", -1);
-      if(radioInfo==-1){
-         if(radio){
-            radioInfo=50;
-         }
-         else{
-            radioInfo=100;
-         }
-      }
+      mode = sharedPref.getInt("mode", -1);
+      maxRounds = sharedPref.getInt("maxRounds",50);
+      goalRounds = sharedPref.getInt("goalRounds",100);
       for (int i = 0; i < MAXTEAMS; i++) {
          teamNamesAr[i] = sharedPref.getString("team" + i, teamNamesAr[i]);
       }
@@ -284,11 +258,12 @@ public class Settings extends Activity {
    public void saveValues() {
       SharedPreferences sharedPref = getSharedPreferences("userSettings", Context.MODE_PRIVATE);
       SharedPreferences.Editor editor = sharedPref.edit();
+      /*
       teams = teamsBar.getProgress();
       timeProgr = timeBar.getProgress();
       wrong = wrongBar.getProgress();
       skip = skipBar.getProgress();
-
+   */
       editor.putInt("realTime", realTime);//done
       editor.putInt("timeProgr", timeProgr);//done
       editor.putInt("teams", teams + 2);//done
@@ -297,19 +272,13 @@ public class Settings extends Activity {
       editor.putInt("goal", goal);
       editor.putInt("rounds", rounds);
       editor.putBoolean("settingsChanged", true);
-      if(radio){
-         radioInfo=Integer.parseInt(txtMaxRounds.getText().toString());
-      }
-      else {
-         radioInfo=Integer.parseInt(txtGoalPoints.getText().toString());
-
-      }
-      editor.putInt("radioInfo", radioInfo);
+      editor.putInt("goalRounds", goalRounds);
+      editor.putInt("maxRounds", maxRounds);
       for (int i = 0; i < MAXTEAMS; i++) {
          String nameOfTeam = teamNamesInput[i].getText().toString();
          editor.putString("team" + i, nameOfTeam);
       }
-      editor.putBoolean("radio", radio);//done
+      editor.putInt("mode", mode);//done
       editor.apply();
    }
 
@@ -324,14 +293,18 @@ public class Settings extends Activity {
       switch (view.getId()) {
          case R.id.btnRounds:
             if (checked)
-               radio = true;
-            //TODO
+              mode=0;
             break;
          case R.id.btnGoal:
             if (checked)
-               radio = false;
-            //TODO
+               mode=1;
             break;
+         case R.id.btnInfinite:
+            if (checked)
+               mode=2;
+            break;
+         default:
+            mode=-1;
       }
    }
 
@@ -364,7 +337,32 @@ public class Settings extends Activity {
               .setNegativeButton("Don't save", null).show();
 
    }
+   public void reduceMaxOnClick(View v){
+      maxRounds-=5;
+      if (maxRounds<5){
+         maxRounds=5;
+      }
+      txtMaxRounds.setText(maxRounds+"");
+   }
+   public void increaseMaxOnClick(View v){
+      maxRounds+=5;
+      if (maxRounds>MAXMAXROUNDS){
+         maxRounds=MAXMAXROUNDS;
+      }
+      txtMaxRounds.setText(maxRounds+"");
+   }
    public void reduceGoalOnClick(View v){
-
+      goalRounds-=5;
+      if (goalRounds<5){
+         goalRounds=5;
+      }
+      txtGoalPoints.setText(goalRounds+"");
+   }
+   public void increaseGoalOnClick(View v){
+      goalRounds+=5;
+      if (goalRounds>MAXGOALROUNDS){
+         goalRounds=MAXGOALROUNDS;
+      }
+      txtGoalPoints.setText(goalRounds+"");
    }
 }
