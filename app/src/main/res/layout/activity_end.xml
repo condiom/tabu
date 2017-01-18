@@ -19,7 +19,7 @@
     <TextView
         android:id="@+id/txtWinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="62dp"
         android:gravity="center"
         android:text="WINNER"
         android:textSize="30sp"
@@ -29,8 +29,8 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/trophy"/>
-
+        android:background="@drawable/trophy"
+        android:scaleType="center" />
 
 
 </LinearLayout>

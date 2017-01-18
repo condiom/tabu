@@ -34,7 +34,7 @@ public class Settings extends Activity {
    EditText[] teamNamesInput;
    LinearLayout llTeamNames;
    int radioInfo;
-   int realTime, timeProgr, wrong, skip, goal, rounds;
+   int realTime, timeProgr, wrong, skip, goal=50, rounds;
    int teams = 0;
    boolean radio;
    String teamNamesAr[];
@@ -46,8 +46,8 @@ public class Settings extends Activity {
 
       that = this;
       //Initializing koumpia
-      maxRoundsBar = (SeekBar) findViewById(R.id.seekBarMaxRounds);
-      goalPointsBar = (SeekBar) findViewById(R.id.seekBarGoalPoints);
+      //maxRoundsBar = (SeekBar) findViewById(R.id.seekBarMaxRounds);
+      //goalPointsBar = (SeekBar) findViewById(R.id.seekBarGoalPoints);
       teamsBar = (SeekBar) findViewById(R.id.btnTeams);
       timeBar = (SeekBar) findViewById(R.id.btnTime);
       wrongBar = (SeekBar) findViewById(R.id.btnWrongPoints);
@@ -119,11 +119,11 @@ public class Settings extends Activity {
       }
       if(radio){
          txtMaxRounds.setText(radioInfo+"");
-         maxRoundsBar.setProgress(radioInfo/5-1);
+  //       maxRoundsBar.setProgress(radioInfo/5-1);
       }
       else {
          txtGoalPoints.setText(radioInfo+"");
-         goalPointsBar.setProgress(radioInfo/5-1);
+//         goalPointsBar.setProgress(radioInfo/5-1);
       }
       //SeekBars listeners
       teamsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -218,7 +218,7 @@ public class Settings extends Activity {
 
          }
       });
-      maxRoundsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+      /*maxRoundsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
          @Override
          public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
             txtMaxRounds.setText(maxRoundsBar.getProgress()*5+5+"");
@@ -249,7 +249,7 @@ public class Settings extends Activity {
          public void onStopTrackingTouch(SeekBar seekBar) {
 
          }
-      });
+      });*/
    }
 
    /**
@@ -364,5 +364,7 @@ public class Settings extends Activity {
               .setNegativeButton("Don't save", null).show();
 
    }
+   public void reduceGoalOnClick(View v){
 
+   }
 }
