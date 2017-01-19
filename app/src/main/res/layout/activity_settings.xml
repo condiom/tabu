@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,11 +19,11 @@
             android:orientation="vertical" >
 
             <TextView
+                android:gravity="center_vertical"
                 android:text="Gameplay:"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:id="@+id/txt8"
-                android:textAlignment="viewStart"
                 android:textSize="18sp"
                 android:textStyle="normal|bold" />
 
@@ -29,47 +31,52 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.04">
+                android:gravity="center">
 
                 <TextView
-                    android:layout_width="194dp"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/txt2"
                     android:textSize="18sp"
-
-                    android:text="\t\t\tTime per round:"
-                    android:textAlignment="viewStart" />
+                    android:layout_weight="1"
+                    android:text="\t\t\tTime per round:" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:foregroundGravity="center">
 
                     <TextView
                         android:text="30"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/txtTime"
+                        android:gravity="center"
                         android:layout_weight="1"
-                        android:textAlignment="center" />
+                        />
 
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageButton
-                            android:layout_width="98dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/iBtnSubRound"
-                            android:src="@android:drawable/btn_dialog"
-                            android:background="@drawable/transparent"
-                            android:onClick="reduceTimeOnClick"/>
+                       >
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/iBtnSubRound"
+                            android:src="@android:drawable/btn_dialog"
+                            android:background="@drawable/transparent"
+                            android:onClick="reduceTimeOnClick"
+                            android:layout_weight="1"
+
+                            />
+
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:id="@+id/iBtnAddRound"
                             android:layout_weight="1"
                             android:src="@android:drawable/btn_dialog"
@@ -87,16 +94,20 @@
                >
 
                 <TextView
-                    android:layout_width="195dp"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/txt1"
                     android:textSize="18sp"
                     android:text="\t\t\tNumber of Teams:"
-                    android:textAlignment="viewStart" />
+                    android:layout_weight="1"
+                />
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    >
 
                     <TextView
                         android:text="5"
@@ -104,29 +115,33 @@
                         android:layout_height="match_parent"
                         android:id="@+id/txtTeamNum"
                         android:layout_weight="1"
-                        android:textAlignment="center" />
+                        android:gravity="center"
+                        />
 
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageButton
-                            android:layout_width="94dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/iBtnSubTeam"
-                            android:src="@android:drawable/btn_dialog"
-                            android:background="@drawable/transparent"
-                            android:onClick="reduceTeamOnClick" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/iBtnAddTeam"
-                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:id="@+id/iBtnSubTeam"
                             android:src="@android:drawable/btn_dialog"
                             android:background="@drawable/transparent"
-                            android:onClick="increaseTeamOnClick" />
+                            android:onClick="reduceTeamOnClick"
+                            android:layout_weight="1"
+                            />
+
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/iBtnAddTeam"
+                            android:src="@android:drawable/btn_dialog"
+                            android:background="@drawable/transparent"
+                            android:onClick="increaseTeamOnClick"
+                            android:layout_weight="1"/>
                     </LinearLayout>
 
                 </FrameLayout>
@@ -149,6 +164,7 @@
                 android:background="@android:color/darker_gray" />
 
             <TextView
+                android:gravity="center_vertical"
                 android:text="Points System:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -162,7 +178,8 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -171,19 +188,22 @@
                     android:textSize="18sp"
                     android:text="\t\t\tWrong:"
                     android:layout_weight="1"
-                    android:textAlignment="viewStart" />
+                    android:gravity="center_vertical"/>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:id="@+id/txtWrong"
                         android:layout_weight="1"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:text="+2 testing"
+                        android:gravity="center"/>
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -192,7 +212,7 @@
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:id="@+id/iBtnSubWrong"
                             android:layout_weight="1"
                             android:src="@android:drawable/btn_dialog"
@@ -201,7 +221,7 @@
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:id="@+id/iBtnAddWrong"
                             android:layout_weight="1"
                             android:src="@android:drawable/btn_dialog"
@@ -216,7 +236,9 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center"
+                >
 
                 <TextView
                     android:layout_width="match_parent"
@@ -225,19 +247,21 @@
                     android:textSize="18sp"
                     android:text="\t\t\tSkip:"
                     android:layout_weight="1"
-                    android:textAlignment="viewStart" />
+                    android:gravity="center_vertical"/>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:id="@+id/txtSkip"
                         android:layout_weight="1"
-                        android:textAlignment="center" />
+                        android:gravity="center"
+                        android:text="+2 testing" />
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -246,7 +270,7 @@
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:id="@+id/iBtnAddSkip"
                             android:layout_weight="1"
                             android:src="@android:drawable/btn_dialog"
@@ -255,7 +279,7 @@
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:id="@+id/iBtnSubSkip"
                             android:layout_weight="1"
                             android:src="@android:drawable/btn_dialog"
@@ -274,6 +298,7 @@
 
             <TextView
                 android:text="Ending:"
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt9"
@@ -292,6 +317,7 @@
                     android:layout_weight="0.04" >
 
                     <RadioButton
+                        android:gravity="center_vertical"
                         android:text="Max Rounds:"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -302,6 +328,7 @@
                         android:onClick="onRadioButtonClicked" />
 
                     <RadioButton
+                        android:gravity="center_vertical"
                         android:text="Goal Points:"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -313,6 +340,7 @@
                         android:layout_weight="0.04" />
 
                     <RadioButton
+                        android:gravity="center_vertical"
                         android:text="Infinite Game:"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -355,7 +383,7 @@
 
                             <ImageButton
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:id="@+id/iBtnSubMax"
                                 android:layout_weight="1"
                                 android:src="@android:drawable/btn_dialog"
@@ -364,7 +392,7 @@
 
                             <ImageButton
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:src="@android:drawable/btn_dialog"
                                 android:id="@+id/iBtnAddMax"
                                 android:background="@drawable/transparent"
@@ -397,7 +425,7 @@
                             android:layout_weight="1">
 
                             <ImageButton
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:src="@android:drawable/btn_dialog"
                                 android:id="@+id/iBtnSubGoal"
                                 android:layout_width="match_parent"
@@ -408,7 +436,7 @@
 
                             <ImageButton
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:src="@android:drawable/btn_dialog"
                                 android:id="@+id/iBtnAddGoal"
                                 android:layout_weight="1"
@@ -435,7 +463,8 @@
                 android:id="@+id/btnSaveAndExit"
                 android:layout_weight="0.04"
                 android:onClick="saveAndExitClick"
-                tools:text="Save and Exit"/>
+                tools:text="Save and Exit"
+                android:elevation="0dp" />
 
             <Button
                 android:text="Exit"

@@ -224,7 +224,7 @@ public class Game extends Activity {
                 pbar.setProgress((pbar.getProgress() + 1) % 60);
                 if (milisUntilFinished / 1000 < 10) {
                     pbar.setVisibility(View.INVISIBLE);
-                    timer.setTextColor(Color.RED);
+                    timer.setTextColor(Color.BLACK);
                     timer.setText(String.format("%d:%03d", milisUntilFinished / 1000, milisUntilFinished % 1000));
                 } else {
                     timer.setText(milisUntilFinished / 1000 + "");
@@ -304,6 +304,7 @@ public class Game extends Activity {
         saveValues();
         Intent intent = new Intent(this, End.class);
         startActivity(intent);
+        finish();
     }
 
     /**
