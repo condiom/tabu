@@ -21,6 +21,7 @@ public class Settings extends Activity {
    final int MAXMAXROUNDS=100;
    final int MAXGOALROUNDS=200;
    final int MAXTEAMS = 6;
+   final int MAXTIME = 210;
    Context that;
    /*SeekBar teamsBar, timeBar, wrongBar, skipBar;*/
    RadioButton btnGoal, btnRounds,btnInfinity;
@@ -28,7 +29,7 @@ public class Settings extends Activity {
    TextView[] teamNames;
    EditText[] teamNamesInput;
    LinearLayout llTeamNames;
-   int realTime, timeProgr, wrong, skip, goal=50, rounds,maxRounds,goalRounds,mode;
+   int realTime=11, wrong, skip, goal=50, rounds,maxRounds,goalRounds,mode;
    int teams = 0;
    String teamNamesAr[];
 
@@ -36,25 +37,30 @@ public class Settings extends Activity {
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_settings);
+
       maxRounds=50;
       goalRounds=100;
-      that = this;
+      that = this; //whaaaaaat? XD
       /*
       teamsBar = (SeekBar) findViewById(R.id.btnTeams);
       timeBar = (SeekBar) findViewById(R.id.btnTime);
       wrongBar = (SeekBar) findViewById(R.id.btnWrongPoints);
       skipBar = (SeekBar) findViewById(R.id.btnSkipPoints);
       */
-      txtTeams = (TextView) findViewById(R.id.txtTeams);
-      txtTime = (TextView) findViewById(R.id.txtTimes);
+
       txtWrong = (TextView) findViewById(R.id.txtWrong);
       txtSkip = (TextView) findViewById(R.id.txtSkip);
+
       btnGoal = (RadioButton) findViewById(R.id.btnGoal);
       btnRounds = (RadioButton) findViewById(R.id.btnRounds);
       btnInfinity = (RadioButton) findViewById(R.id.btnInfinite);
+
       txtMaxRounds = (TextView) findViewById(R.id.txtMaxRounds);
       txtGoalPoints = (TextView) findViewById(R.id.txtGoalPoints);
-      // For team names textvies and editviews
+      txtTeams = (TextView) findViewById(R.id.txtTeamNum);
+      txtTime = (TextView) findViewById(R.id.txtTime);
+
+      // For teamnames textvies and editviews
       llTeamNames = (LinearLayout) findViewById(R.id.llteamNames);
       teamNames = new TextView[MAXTEAMS];
       teamNamesInput = new EditText[MAXTEAMS];
@@ -65,18 +71,16 @@ public class Settings extends Activity {
          teamNames[i].setText("Team " + (i + 1) + " :");
          teamNamesInput[i] = new EditText(this);
       }
-
       //Reading settings from file
       getValues();
       temp = new TextView(this);
       temp.setText("Team Names:");
       temp.setTextSize(20);
-      llTeamNames.addView(temp);
-      for (int j = 0; j < teams + 2; j++) {
+      //llTeamNames.addView(temp);
+      for (int j = 0; j < teams ; j++) {
          teamNamesInput[j].setText(teamNamesAr[j]);
          llTeamNames.addView(teamNames[j]);
          llTeamNames.addView(teamNamesInput[j]);
-
       }
       //Setting settings according to file
       switch (mode){
@@ -104,7 +108,23 @@ public class Settings extends Activity {
       }
       txtMaxRounds.setText(String.valueOf(maxRounds));
       txtGoalPoints.setText(String.valueOf(goalRounds));
-      realTime = 12;
+      txtTeams.setText(String.valueOf(teams));
+      txtTime.setText(String.valueOf(realTime));
+      if (wrong == 0) {
+         txtWrong.setText("Nothing");
+      } else if (wrong == 1) {
+         txtWrong.setText("+1 Others");
+      } else {
+         txtWrong.setText("-1 Team");
+      }
+      if (skip == 0) {
+         txtSkip.setText("Nothing");
+      } else if (skip == 1) {
+         txtSkip.setText("+1 Others");
+      } else {
+         txtSkip.setText("-1 Team");
+      }
+
       /*
       teamsBar.setProgress(teams);
       txtTeams.setText("Number of Teams: " + (teamsBar.getProgress() + 2));
@@ -238,8 +258,8 @@ public class Settings extends Activity {
     */
    public void getValues() {
       SharedPreferences sharedPref = getSharedPreferences("userSettings", Context.MODE_PRIVATE);
-      timeProgr = sharedPref.getInt("timeProgr", timeProgr);
-      teams = sharedPref.getInt("teams", 2) - 2;
+      teams = sharedPref.getInt("teams", 2);
+      realTime=sharedPref.getInt("realTime",realTime);
       wrong = sharedPref.getInt("wrong", wrong);
       skip = sharedPref.getInt("skip", skip);
       goal = sharedPref.getInt("goal", goal);
@@ -265,8 +285,7 @@ public class Settings extends Activity {
       skip = skipBar.getProgress();
    */
       editor.putInt("realTime", realTime);//done
-      editor.putInt("timeProgr", timeProgr);//done
-      editor.putInt("teams", teams + 2);//done
+      editor.putInt("teams", teams );//done
       editor.putInt("wrong", wrong);//done
       editor.putInt("skip", skip);//done
       editor.putInt("goal", goal);
@@ -364,5 +383,98 @@ public class Settings extends Activity {
          goalRounds=MAXGOALROUNDS;
       }
       txtGoalPoints.setText(goalRounds+"");
+   }
+   public void reduceTeamOnClick(View v){
+      teams-=1;
+      if (teams<2){
+         teams=2;
+      }
+      txtTeams.setText(teams+"");
+      llTeamNames.removeAllViews();
+      //llTeamNames.addView(temp);
+      for (int j = 0; j < teams; j++) {
+         teamNamesInput[j].setText(teamNamesAr[j]);
+         llTeamNames.addView(teamNames[j]);
+         llTeamNames.addView(teamNamesInput[j]);
+      }
+   }
+   public void increaseTeamOnClick(View v){
+      teams+=1;
+      if (teams>MAXTEAMS){
+         teams=MAXTEAMS;
+      }
+      txtTeams.setText(teams+"");
+      llTeamNames.removeAllViews();
+      //llTeamNames.addView(temp);
+      for (int j = 0; j < teams; j++) {
+         teamNamesInput[j].setText(teamNamesAr[j]);
+         llTeamNames.addView(teamNames[j]);
+         llTeamNames.addView(teamNamesInput[j]);
+      }
+   }
+   public void increaseTimeOnClick(View v){
+      if(realTime==13){ //TODO remove this line
+         realTime-=13;
+      }
+      realTime+=30;
+      if (realTime>MAXTIME){
+         realTime=MAXTIME;
+      }
+      txtTime.setText(realTime+"");
+   }
+   public void reduceTimeOnClick(View v){
+      realTime-=30;
+      if (realTime<=0){ //TODO change to 30-30
+         realTime=13;
+      }
+      txtTime.setText(realTime+"");
+   }
+   public void reduceSkipOnClick(View v){
+      skip--;
+      if(skip<-1)
+         skip=-1;
+      if (skip == 0) {
+         txtSkip.setText("Nothing");
+      } else if (skip == 1) {
+         txtSkip.setText("+1 Others");
+      } else {
+         txtSkip.setText("-1 Team");
+      }
+   }
+   public void increaseSkipOnClick(View v){
+      skip++;
+      if(skip>1)
+         skip=1;
+      if (skip == 0) {
+         txtSkip.setText("Nothing");
+      } else if (skip == 1) {
+         txtSkip.setText("+1 Others");
+      } else {
+         txtSkip.setText("-1 Team");
+      }
+   }
+   public void reduceWrongOnClick(View v){
+      wrong--;
+      if(wrong<-1)
+         wrong=-1;
+      if (wrong == 0) {
+         txtWrong.setText("Nothing");
+      } else if (wrong == 1) {
+         txtWrong.setText("+1 Others");
+      } else {
+         txtWrong.setText("-1 Team");
+      }
+   }
+   public void increaseWrongOnClick(View v){
+      wrong++;
+      if(wrong>1)
+         wrong=1;
+      if (wrong == 0) {
+         txtWrong.setText("Nothing");
+      } else if (wrong == 1) {
+         txtWrong.setText("+1 Others");
+      } else {
+         txtWrong.setText("-1 Team");
+      }
    }
 }

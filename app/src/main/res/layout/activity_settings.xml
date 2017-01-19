@@ -16,6 +16,70 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <TextView
+                android:text="Gameplay:"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:id="@+id/txt8"
+                android:textAlignment="viewStart"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.04">
+
+                <TextView
+                    android:layout_width="194dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txt2"
+                    android:textSize="18sp"
+
+                    android:text="\t\t\tTime per round:"
+                    android:textAlignment="viewStart" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:text="30"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/txtTime"
+                        android:layout_weight="1"
+                        android:textAlignment="center" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <ImageButton
+                            android:layout_width="98dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/iBtnSubRound"
+                            android:src="@android:drawable/btn_dialog"
+                            android:background="@drawable/transparent"
+                            android:onClick="reduceTimeOnClick"/>
+
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/iBtnAddRound"
+                            android:layout_weight="1"
+                            android:src="@android:drawable/btn_dialog"
+                            android:background="@drawable/transparent"
+                            android:onClick="increaseTimeOnClick"/>
+
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -23,37 +87,49 @@
                >
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="195dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/txtTeams"
+                    android:id="@+id/txt1"
                     android:textSize="18sp"
-                    android:layout_weight="1"
-                    tools:text="Number of Teams:  ***"/>
+                    android:text="\t\t\tNumber of Teams:"
+                    android:textAlignment="viewStart" />
 
-                <LinearLayout
-                    android:orientation="horizontal"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_height="match_parent">
 
-                    <ImageButton
+                    <TextView
+                        android:text="5"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/iBtnSubTeam"
+                        android:layout_height="match_parent"
+                        android:id="@+id/txtTeamNum"
                         android:layout_weight="1"
-                        android:src="@android:drawable/btn_dialog"
-                        android:background="@drawable/transparent"
-                        android:onClick="reduceMaxOnClick"/>
+                        android:textAlignment="center" />
 
-                    <ImageButton
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/iBtnAddTeam"
-                        android:layout_weight="1"
-                        android:src="@android:drawable/btn_dialog"
-                        android:background="@drawable/transparent"
-                        android:onClick="reduceMaxOnClick"/>
-                </LinearLayout>
+                        android:layout_height="match_parent">
+
+                        <ImageButton
+                            android:layout_width="94dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/iBtnSubTeam"
+                            android:src="@android:drawable/btn_dialog"
+                            android:background="@drawable/transparent"
+                            android:onClick="reduceTeamOnClick" />
+
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/iBtnAddTeam"
+                            android:layout_weight="1"
+                            android:src="@android:drawable/btn_dialog"
+                            android:background="@drawable/transparent"
+                            android:onClick="increaseTeamOnClick" />
+                    </LinearLayout>
+
+                </FrameLayout>
 
 
             </LinearLayout>
@@ -67,57 +143,20 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.04">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/txtTimes"
-                    android:textSize="18sp"
-
-                    tools:text="Time per round: ***"
-                    android:layout_weight="1"/>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <ImageButton
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/iBtnSubRound"
-                        android:layout_weight="1"
-                        android:src="@android:drawable/btn_dialog"
-                        android:background="@drawable/transparent"
-                        android:onClick="reduceMaxOnClick"/>
-
-                    <ImageButton
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/iBtnAddRound"
-                        android:layout_weight="1"
-                        android:src="@android:drawable/btn_dialog"
-                        android:background="@drawable/transparent"
-                        android:onClick="reduceMaxOnClick"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
 
             <TextView
-                android:text=" Points System:"
+                android:text="Points System:"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtPoints"
+                android:id="@+id/txt2.5"
                 android:textSize="18sp"
                 android:layout_weight="1"
-                android:textStyle="normal|bold" />
+                android:textStyle="normal|bold"
+                android:textAlignment="viewStart" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -125,40 +164,31 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <LinearLayout
-                    android:orientation="vertical"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/txt3"
+                    android:textSize="18sp"
+                    android:text="\t\t\tWrong:"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:textAlignment="viewStart" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtWrong"
-                        android:textSize="18sp"
-                        tools:text="Wrong: ******"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txtSkip"
-                        android:textSize="18sp"
-                        tools:text="Skip *****"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:textAlignment="center" />
 
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_height="match_parent">
 
                         <ImageButton
                             android:layout_width="match_parent"
@@ -167,7 +197,7 @@
                             android:layout_weight="1"
                             android:src="@android:drawable/btn_dialog"
                             android:background="@drawable/transparent"
-                            android:onClick="reduceMaxOnClick"/>
+                            android:onClick="reduceWrongOnClick"/>
 
                         <ImageButton
                             android:layout_width="match_parent"
@@ -176,23 +206,43 @@
                             android:layout_weight="1"
                             android:src="@android:drawable/btn_dialog"
                             android:background="@drawable/transparent"
-                            android:onClick="reduceMaxOnClick"/>
+                            android:onClick="increaseWrongOnClick"/>
                     </LinearLayout>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txt4"
+                    android:textSize="18sp"
+                    android:text="\t\t\tSkip:"
+                    android:layout_weight="1"
+                    android:textAlignment="viewStart" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtSkip"
+                        android:layout_weight="1"
+                        android:textAlignment="center" />
 
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageButton
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/iBtnSubSkip"
-                            android:layout_weight="1"
-                            android:src="@android:drawable/btn_dialog"
-                            android:background="@drawable/transparent"
-                            android:onClick="reduceMaxOnClick"/>
+                        android:layout_height="match_parent">
 
                         <ImageButton
                             android:layout_width="match_parent"
@@ -201,10 +251,34 @@
                             android:layout_weight="1"
                             android:src="@android:drawable/btn_dialog"
                             android:background="@drawable/transparent"
-                            android:onClick="reduceMaxOnClick"/>
+                            android:onClick="reduceSkipOnClick"/>
+
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/iBtnSubSkip"
+                            android:layout_weight="1"
+                            android:src="@android:drawable/btn_dialog"
+                            android:background="@drawable/transparent"
+                            android:onClick="increaseSkipOnClick"/>
                     </LinearLayout>
-                </LinearLayout>
+
+                </FrameLayout>
+
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:text="Ending:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt9"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
 
             <LinearLayout
                 android:orientation="horizontal"
