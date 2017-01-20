@@ -22,6 +22,7 @@ public class End extends Activity {
       String winingTeam=sharedPref.getString("winingTeam","ERROR");
       txtWinner=(TextView) findViewById(R.id.txtWinner);
       txtWinner.setText(winingTeam);
+      MainMenu.disableCont();
    }
 
 }

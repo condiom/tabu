@@ -229,6 +229,7 @@ public class Settings extends Activity {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
                         saveValues();
+                        MainMenu.disableCont();
                         finish();
                     }
                 })

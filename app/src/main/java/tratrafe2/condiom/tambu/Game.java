@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,15 +32,16 @@ public class Game extends Activity {
     int countFiles = 0;
     int teamPlaying = 0;
     int debug = 0;
-    boolean paused = false;
-
+    long currentTime = 0;
+    static boolean newGame;
     CountDownTimer cdt;
 
     ProgressBar pbar;
-    LinearLayout llTeamNames, llTeamScores, llindicators;
-    TextView timer, txt1, txt2, txt3, txt4, txt5, txtMain;
+    LinearLayout llTeamNames, llTeamScores, llindicators, touchLayout;
+    TextView console, timer, txt1, txt2, txt3, txt4, txt5, txtMain;
     TextView teamNames[], teamScores[], indicators[];
-    Button btnStart, btnWrong, btnSkip, btnCorrect, btnNewGame;
+    Button btnWrong, btnSkip, btnCorrect, btnNewGame;
+    ImageButton btnPause;
 
     int Scores[];
     int currentCard, realTime, NumOfTeams, wrongPoints, skipPoints, goal, rounds, index, mode, maxRounds, goalRounds;
@@ -54,16 +57,39 @@ public class Game extends Activity {
         getSettings();
         initializeViews();
         initializeVariables();
+        if (newGame) {
+            newGame = false;
+            resetGame();
+        }
+    }
 
+    public static void setNewGame() {
+        newGame = true;
     }
 
     public void resetGame() {
-        currentTime = realTime;
+        currentTime = realTime * 1000;
         teamPlaying = 0;
         for (int i = 0; i < NumOfTeams; i++) {
             Scores[i] = 0;
         }
         rounds = 0;
+        txt1.setText("");
+        txt2.setText("");
+        txt3.setText("");
+        txt4.setText("");
+        txt5.setText("");
+        txtMain.setText("Tap to START!");
+        timer.setTextColor(oldColors);
+        pbar.setVisibility(View.VISIBLE);
+        pbar.setProgress(60);
+        timer.setText("" + realTime);
+        console.setText(teamNamesStr[teamPlaying] + "'s turn!");
+        for (int i = 0; i < indicators.length; i++) {
+            indicators[i].setVisibility(View.INVISIBLE);
+        }
+        indicators[teamPlaying].setVisibility(View.VISIBLE);
+        updateScores();
     }
 
     public void getSettings() {
@@ -79,7 +105,7 @@ public class Game extends Activity {
         mode = sharedPref.getInt("mode", 0);
         maxRounds = sharedPref.getInt("maxRounds", 50);
         goalRounds = sharedPref.getInt("goalRounds", 100);
-        currentTime = sharedPref.getFloat("currentTime", (float) realTime);
+        currentTime = sharedPref.getLong("currentTime", realTime * 1000);
         teamNamesStr = new String[MAXTEAMS];
         for (int i = 0; i < MAXTEAMS; i++) {
             teamNamesStr[i] = sharedPref.getString("team" + i, "team " + i);
@@ -113,7 +139,13 @@ public class Game extends Activity {
             }
         }
         if (settingsChanged) {
-            resetGame();
+            settingsChanged=false;
+            currentTime = realTime * 1000;
+            teamPlaying = 0;
+            for (int i = 0; i < NumOfTeams; i++) {
+                Scores[i] = 0;
+            }
+            rounds = 0;
         }
     }
 
@@ -129,28 +161,46 @@ public class Game extends Activity {
         txt3 = (TextView) findViewById(R.id.txt3);
         txt4 = (TextView) findViewById(R.id.txt4);
         txt5 = (TextView) findViewById(R.id.txt5);
+        console = (TextView) findViewById(R.id.txtConsole);
         timer = (TextView) findViewById(R.id.txtTimer);
         txtMain = (TextView) findViewById(R.id.txtMain);
-        btnStart = (Button) findViewById(R.id.btnStart);
         btnCorrect = (Button) findViewById(R.id.btnCorrect);
         btnSkip = (Button) findViewById(R.id.btnSkip);
         btnWrong = (Button) findViewById(R.id.btnWrong);
         llTeamNames = (LinearLayout) findViewById(R.id.llteamNames);
         llTeamScores = (LinearLayout) findViewById(R.id.llteamScores);
         llindicators = (LinearLayout) findViewById(R.id.llindicators);
-        btnNewGame = (Button) findViewById(R.id.btnNewGame);
+        touchLayout = (LinearLayout) findViewById(R.id.TouchLayout);
         btnCorrect.setEnabled(false);
         btnWrong.setEnabled(false);
         btnSkip.setEnabled(false);
         oldColors = txt1.getTextColors(); //save original colors
+        pbar = (ProgressBar) findViewById(R.id.progressBar);
 
-        timer.setText(teamNamesStr[teamPlaying] + "'s turn!");
+        console.setText("Round " + rounds + ": " + teamNamesStr[teamPlaying] + "'s turn!");
         txt1.setText("");
         txt2.setText("");
         txt3.setText("");
         txt4.setText("");
         txt5.setText("");
-        txtMain.setText("");
+        txtMain.setText("Tap to START!");
+        if (currentTime / 1000 < 10) {
+            pbar.setVisibility(View.INVISIBLE);
+            timer.setTextColor(Color.BLACK);
+            timer.setText(String.format("%d:%03d", currentTime / 1000, currentTime % 1000));
+        } else {
+            pbar.setVisibility(View.VISIBLE);
+            int temp=(int)((1-((currentTime%1000)/1000.0))*60);
+            pbar.setProgress(temp);
+            timer.setText(currentTime / 1000 + "");
+        }
+        touchLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startClick();
+                touchLayout.setOnClickListener(null);
+            }
+        });
     }
 
     /**
@@ -162,6 +212,8 @@ public class Game extends Activity {
 
         lp.weight = 1.0f;
         lp.gravity = Gravity.CENTER;
+
+        //Insert team names
         for (int i = 0; i < NumOfTeams; i++) {
 
             teamNames[i] = new TextView(this);
@@ -184,10 +236,8 @@ public class Game extends Activity {
             llTeamNames.addView(teamNames[i]);
             llTeamScores.addView(teamScores[i]);
             llindicators.addView(indicators[i]);
-
         }
         indicators[teamPlaying].setVisibility(View.VISIBLE);
-        updateScores();
     }
 
     /**
@@ -205,22 +255,25 @@ public class Game extends Activity {
         txt5.setText(cardArray[i].apagorevmenes[4]);
     }
 
+
     /**
      * Metritis pros ta katw arxizontas p to seconds.
      *
-     * @param minutes
+     * @param milis
      */
-    float currentTime = 0;
+    public void startCounter(long milis) {
 
-    public void startCounter(float seconds) {
-        pbar = (ProgressBar) findViewById(R.id.progressBar);
         timer.setTextColor(oldColors);
-        if (seconds >= 10)
+        if (milis >= 10000)
             pbar.setVisibility(View.VISIBLE);
-        cdt = new CountDownTimer((int) (seconds * 1000), 10) {
+        cdt = new CountDownTimer((int) (milis), 10) {
             @Override
             public void onTick(long milisUntilFinished) {
-                pbar.setProgress((pbar.getProgress() + 1) % 60);
+                if (pbar.getProgress() >= 60) {
+                    pbar.setProgress((pbar.getProgress() + 1) % 60);
+                } else {
+                    pbar.setProgress(pbar.getProgress() + 1);
+                }
                 if (milisUntilFinished / 1000 < 10) {
                     pbar.setVisibility(View.INVISIBLE);
                     timer.setTextColor(Color.BLACK);
@@ -228,7 +281,7 @@ public class Game extends Activity {
                 } else {
                     timer.setText(milisUntilFinished / 1000 + "");
                 }
-                currentTime = (milisUntilFinished / (float) 1000);
+                currentTime = milisUntilFinished;
             }
 
             @Override
@@ -243,15 +296,10 @@ public class Game extends Activity {
                     }
                 }
                 teamPlaying = (teamPlaying + 1) % NumOfTeams;
-
-                btnStart.setEnabled(true);
                 btnCorrect.setEnabled(false);
                 btnWrong.setEnabled(false);
                 btnSkip.setEnabled(false);
-                btnNewGame.setEnabled(true);
-                btnStart.setText("START");
-                paused = !paused;
-                currentTime = realTime;
+                currentTime = realTime * 1000;
 
                 timer.setText("TIME'S UP");
                 Animation anim = new AlphaAnimation(0.0f, 1.0f);
@@ -263,19 +311,33 @@ public class Game extends Activity {
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-                        btnStart.setEnabled(false);
-                        btnStart.setText("START");
                     }
 
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        btnStart.setEnabled(true);
+                        //TODO INSERT "TOUCH HERE TO START"
                         timer.setTextColor(oldColors);
-                        timer.setText("Round " + rounds + ": " + teamNamesStr[teamPlaying] + "'s turn!");
+                        pbar.setVisibility(View.VISIBLE);
+                        pbar.setProgress(60);
+                        timer.setText("" + realTime);
+                        txt1.setText("");
+                        txt2.setText("");
+                        txt3.setText("");
+                        txt4.setText("");
+                        txt5.setText("");
+                        txtMain.setText("Tap to START!");
+                        console.setText("Round " + rounds + ": " + teamNamesStr[teamPlaying] + "'s turn!");
                         for (int i = 0; i < indicators.length; i++) {
                             indicators[i].setVisibility(View.INVISIBLE);
                         }
                         indicators[teamPlaying].setVisibility(View.VISIBLE);
+                        touchLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                startClick();
+                                touchLayout.setOnClickListener(null);
+                            }
+                        });
                     }
 
                     @Override
@@ -398,68 +460,44 @@ public class Game extends Activity {
      * Start Click
      * start next team's timer
      */
-    public void StartClick(View v) {
-        if (!paused) {
-            paused = !paused;
-            selectNewCard();
-
-            startCounter(currentTime);
-            if (currentTime < 1) {
-                btnStart.setText("START");
-            } else {
-                btnStart.setText("PAUSE ||");
-            }
-            btnCorrect.setEnabled(true);
-            btnWrong.setEnabled(true);
-            btnSkip.setEnabled(true);
-            btnNewGame.setEnabled(false);
-        } else {
-            paused = !paused;
-            btnStart.setText("START");
-            btnCorrect.setEnabled(false);
-            btnWrong.setEnabled(false);
-            btnSkip.setEnabled(false);
-            btnNewGame.setEnabled(true);
+    public void PauseClick(View v) {
+        if (cdt != null)
             cdt.cancel();
-
-        }
+        btnCorrect.setEnabled(false);
+        btnWrong.setEnabled(false);
+        btnSkip.setEnabled(false);
+        saveValues();
+        txt1.setText("");
+        txt2.setText("");
+        txt3.setText("");
+        txt4.setText("");
+        txt5.setText("");
+        txtMain.setText("Tap to START!");
+        touchLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startClick();
+                touchLayout.setOnClickListener(null);
+            }
+        });
+        //TODO CALL DIAFIMISI
     }
 
-    /**
-     * Start a new game
-     * reset scores
-     */
-    public void newGameClick(View v) {
-        new AlertDialog.Builder(this)
-                .setTitle("New Game")
-                .setMessage("Do you really want to create a new game?")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        resetGame();
-                        txt1.setText("");
-                        txt2.setText("");
-                        txt3.setText("");
-                        txt4.setText("");
-                        txt5.setText("");
-                        txtMain.setText("");
-                        timer.setTextColor(oldColors);
-                        timer.setText(teamNamesStr[teamPlaying] + "'s turn!");
-                        for (int i = 0; i < indicators.length; i++) {
-                            indicators[i].setVisibility(View.INVISIBLE);
-                        }
-                        indicators[teamPlaying].setVisibility(View.VISIBLE);
-                        updateScores();
-                    }
-                })
-                .setNegativeButton(android.R.string.no, null).show();
+    public void startClick() {
+        selectNewCard();
+        startCounter(currentTime);
+        btnCorrect.setEnabled(true);
+        btnWrong.setEnabled(true);
+        btnSkip.setEnabled(true);
     }
+
 
     /**
      * Return to main menu
      */
     public void exitClick(View v) {
+        if (cdt != null)
+            cdt.cancel();
         saveValues();
         finish();
     }
@@ -471,7 +509,7 @@ public class Game extends Activity {
         SharedPreferences sharedPref = getSharedPreferences("userSettings", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("MAXFILES", MAXFILES);
-        editor.putFloat("currentTime", currentTime);
+        editor.putLong("currentTime", currentTime);
         editor.putInt("countFiles", countFiles);
         editor.putInt("teamPlaying", teamPlaying);
         editor.putInt("index", index);

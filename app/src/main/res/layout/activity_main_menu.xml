@@ -14,6 +14,14 @@
         android:layout_alignParentStart="true">
 
         <Button
+            android:text="Continue Game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCont"
+            tools:text="Continue Game"
+            android:onClick="ContinueGame" />
+
+        <Button
             android:text="Start Game"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
