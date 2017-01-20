@@ -157,12 +157,11 @@ public class Game extends Activity {
      * initialise Variables
      * //TODO me kapio tropo na kamoume ta indicators (rectangles) na exoun to size tou onomatos tis omadas.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void initializeVariables() {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
         lp.weight = 1.0f;
-        lp.gravity = Gravity.CENTER_VERTICAL;
+        lp.gravity = Gravity.CENTER;
         for (int i = 0; i < NumOfTeams; i++) {
 
             teamNames[i] = new TextView(this);

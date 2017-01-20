@@ -171,8 +171,7 @@
                 android:id="@+id/txt2.5"
                 android:textSize="18sp"
                 android:layout_weight="1"
-                android:textStyle="normal|bold"
-                android:textAlignment="viewStart" />
+                android:textStyle="normal|bold"/>
 
             <LinearLayout
                 android:orientation="horizontal"
