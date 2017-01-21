@@ -95,7 +95,6 @@ public class Game extends Activity {
     public void getSettings() {
         SharedPreferences sharedPref = getSharedPreferences("userSettings", Context.MODE_PRIVATE);
         boolean settingsChanged = sharedPref.getBoolean("settingsChanged", false);
-
         realTime = sharedPref.getInt("realTime", 30);
         NumOfTeams = sharedPref.getInt("teams", 2);
         wrongPoints = sharedPref.getInt("wrong", 0);
@@ -139,7 +138,7 @@ public class Game extends Activity {
             }
         }
         if (settingsChanged) {
-            settingsChanged=false;
+            settingsChanged = false;
             currentTime = realTime * 1000;
             teamPlaying = 0;
             for (int i = 0; i < NumOfTeams; i++) {
@@ -190,7 +189,7 @@ public class Game extends Activity {
             timer.setText(String.format("%d:%03d", currentTime / 1000, currentTime % 1000));
         } else {
             pbar.setVisibility(View.VISIBLE);
-            int temp=(int)((1-((currentTime%1000)/1000.0))*60);
+            int temp = (int) ((1 - ((currentTime % 1000) / 1000.0)) * 60);
             pbar.setProgress(temp);
             timer.setText(currentTime / 1000 + "");
         }
@@ -352,20 +351,32 @@ public class Game extends Activity {
      * When a team wins
      */
     private void gameEnd() {
-        int max = 0;
-        int maxTeam = 0;
-        for (int i = 0; i < NumOfTeams; i++) {
-            if (max < Scores[i]) {
-                max = Scores[i];
-                maxTeam = i;
+                //Insertion Sort (fast enough for maximum 6 values)
+        for (int i = 1; i < Scores.length; i++) {
+            int temp = Scores[i];
+            String temp2 = teamNamesStr[i];
+            int j;
+            for (j = i - 1; j >= 0 && temp < Scores[j]; j--) {
+                Scores[j + 1] = Scores[j];
+                teamNamesStr[j + 1] = teamNamesStr[j];
             }
+            Scores[j + 1] = temp;
+            teamNamesStr[j + 1] = temp2;
         }
-        winingTeam = teamNamesStr[maxTeam];
-        resetGame();
-        saveValues();
+        SharedPreferences sharedPref = getSharedPreferences("userSettings", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        for (int i = 0; i < NumOfTeams; i++) {
+            editor.putInt("finalScores" + i, Scores[i]);
+            editor.putString("teamNames" + i, teamNamesStr[i]);
+        }
+        editor.commit();
         Intent intent = new Intent(this, End.class);
         startActivity(intent);
+        End.setNumber(NumOfTeams);
+        MainMenu.disableCont();
+        saveValues();
         finish();
+
     }
 
     /**
@@ -373,10 +384,11 @@ public class Game extends Activity {
      */
     public void updateScores() {
         for (int i = 0; i < NumOfTeams; i++) {
+            teamScores[i].setText(Scores[i] + "");
             if (mode == 1 && Scores[i] >= goalRounds) {
                 gameEnd();
+                return;
             }
-            teamScores[i].setText(Scores[i] + "");
         }
     }
 
@@ -508,13 +520,13 @@ public class Game extends Activity {
     public void saveValues() {
         SharedPreferences sharedPref = getSharedPreferences("userSettings", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("cont",MainMenu.getCont());
         editor.putInt("MAXFILES", MAXFILES);
         editor.putLong("currentTime", currentTime);
         editor.putInt("countFiles", countFiles);
         editor.putInt("teamPlaying", teamPlaying);
         editor.putInt("index", index);
         editor.putBoolean("settingsChanged", false);
-        editor.putString("winingTeam", winingTeam);
         editor.putInt("rounds", rounds);
         Gson gson = new Gson();
         for (int i = 0; i <= index; i++) {

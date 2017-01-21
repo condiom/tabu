@@ -48,16 +48,6 @@
                     android:layout_weight="1"
                     android:foregroundGravity="center">
 
-                    <pl.polak.clicknumberpicker.ClickNumberPickerView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:picker_corner_radius="20"
-                        app:pickers_background_color="@android:color/black"
-                        app:swipe_enabled="false"
-                        app:value_background_color="@android:color/darker_gray"
-                        app:value_text_color="@android:color/white"
-                        android:layout_weight="1" />
-
                     <TextView
                         android:text="30"
                         android:layout_width="match_parent"
@@ -75,23 +65,25 @@
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/iBtnSubRound"
-                            android:src="@android:drawable/btn_dialog"
+                            android:layout_height="20sp"
+                            android:id="@+id/iBtnSubTime"
                             android:background="@drawable/transparent"
                             android:onClick="reduceTimeOnClick"
                             android:layout_weight="1"
-
-                            />
+                            android:src="@drawable/minus"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true"/>
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/iBtnAddRound"
-                            android:layout_weight="1"
-                            android:src="@android:drawable/btn_dialog"
+                            android:layout_height="20sp"
+                            android:id="@+id/iBtnAddTime"
                             android:background="@drawable/transparent"
-                            android:onClick="increaseTimeOnClick"/>
+                            android:onClick="increaseTimeOnClick"
+                            android:layout_weight="1"
+                            android:src="@drawable/plus"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true"/>
 
                     </LinearLayout>
                 </FrameLayout>
@@ -136,22 +128,25 @@
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="20sp"
                             android:id="@+id/iBtnSubTeam"
-                            android:src="@android:drawable/btn_dialog"
                             android:background="@drawable/transparent"
                             android:onClick="reduceTeamOnClick"
                             android:layout_weight="1"
-                            />
+                            android:src="@drawable/minus"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true"/>
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="20sp"
                             android:id="@+id/iBtnAddTeam"
-                            android:src="@android:drawable/btn_dialog"
                             android:background="@drawable/transparent"
                             android:onClick="increaseTeamOnClick"
-                            android:layout_weight="1"/>
+                            android:layout_weight="1"
+                            android:src="@drawable/plus"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true"/>
                     </LinearLayout>
 
                 </FrameLayout>
@@ -221,21 +216,25 @@
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="20sp"
                             android:id="@+id/iBtnSubWrong"
-                            android:layout_weight="1"
-                            android:src="@android:drawable/btn_dialog"
                             android:background="@drawable/transparent"
-                            android:onClick="reduceWrongOnClick"/>
+                            android:onClick="reduceWrongOnClick"
+                            android:layout_weight="1"
+                            android:src="@drawable/minus"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true"/>
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="20sp"
                             android:id="@+id/iBtnAddWrong"
-                            android:layout_weight="1"
-                            android:src="@android:drawable/btn_dialog"
                             android:background="@drawable/transparent"
-                            android:onClick="increaseWrongOnClick"/>
+                            android:onClick="increaseWrongOnClick"
+                            android:layout_weight="1"
+                            android:src="@drawable/plus"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true"/>
                     </LinearLayout>
 
                 </FrameLayout>
@@ -279,21 +278,25 @@
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/iBtnAddSkip"
-                            android:layout_weight="1"
-                            android:src="@android:drawable/btn_dialog"
+                            android:layout_height="20sp"
+                            android:id="@+id/iBtnSubSkip"
                             android:background="@drawable/transparent"
-                            android:onClick="reduceSkipOnClick"/>
+                            android:onClick="reduceSkipOnClick"
+                            android:layout_weight="1"
+                            android:src="@drawable/minus"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true"/>
 
                         <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/iBtnSubSkip"
-                            android:layout_weight="1"
-                            android:src="@android:drawable/btn_dialog"
+                            android:layout_height="20sp"
+                            android:id="@+id/iBtnAddSkip"
                             android:background="@drawable/transparent"
-                            android:onClick="increaseSkipOnClick"/>
+                            android:onClick="increaseSkipOnClick"
+                            android:layout_weight="1"
+                            android:src="@drawable/plus"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true"/>
                     </LinearLayout>
 
                 </FrameLayout>
@@ -392,21 +395,25 @@
 
                             <ImageButton
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="20sp"
                                 android:id="@+id/iBtnSubMax"
-                                android:layout_weight="1"
-                                android:src="@android:drawable/btn_dialog"
                                 android:background="@drawable/transparent"
-                                android:onClick="reduceMaxOnClick"/>
+                                android:onClick="reduceMaxOnClick"
+                                android:layout_weight="1"
+                                android:src="@drawable/minus"
+                                android:scaleType="fitCenter"
+                                android:adjustViewBounds="true"/>
 
                             <ImageButton
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:src="@android:drawable/btn_dialog"
+                                android:layout_height="20sp"
                                 android:id="@+id/iBtnAddMax"
                                 android:background="@drawable/transparent"
+                                android:onClick="increaseMaxOnClick"
                                 android:layout_weight="1"
-                                android:onClick="increaseMaxOnClick"/>
+                                android:src="@drawable/plus"
+                                android:scaleType="fitCenter"
+                                android:adjustViewBounds="true"/>
 
                         </LinearLayout>
                     </FrameLayout>
@@ -434,23 +441,26 @@
                             android:layout_weight="1">
 
                             <ImageButton
-                                android:layout_height="match_parent"
-                                android:src="@android:drawable/btn_dialog"
-                                android:id="@+id/iBtnSubGoal"
                                 android:layout_width="match_parent"
-                                android:layout_weight="1"
-
+                                android:layout_height="20sp"
+                                android:id="@+id/iBtnGoal"
                                 android:background="@drawable/transparent"
-                                android:onClick="reduceGoalOnClick"/>
+                                android:onClick="reduceGoalOnClick"
+                                android:layout_weight="1"
+                                android:src="@drawable/minus"
+                                android:scaleType="fitCenter"
+                                android:adjustViewBounds="true"/>
 
                             <ImageButton
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:src="@android:drawable/btn_dialog"
+                                android:layout_height="20sp"
                                 android:id="@+id/iBtnAddGoal"
-                                android:layout_weight="1"
                                 android:background="@drawable/transparent"
-                                android:onClick="increaseGoalOnClick"/>
+                                android:onClick="increaseGoalOnClick"
+                                android:layout_weight="1"
+                                android:src="@drawable/plus"
+                                android:scaleType="fitCenter"
+                                android:adjustViewBounds="true"/>
 
                         </LinearLayout>
                     </FrameLayout>
