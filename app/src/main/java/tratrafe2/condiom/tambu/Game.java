@@ -1,5 +1,9 @@
 package tratrafe2.condiom.tambu;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +20,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,6 +29,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+
+import org.w3c.dom.Text;
 
 
 public class Game extends Activity {
@@ -35,6 +42,8 @@ public class Game extends Activity {
     long currentTime = 0;
     static boolean newGame;
     CountDownTimer cdt;
+    ColorStateList oldColors;
+
 
     ProgressBar pbar;
     LinearLayout llTeamNames, llTeamScores, llindicators, touchLayout;
@@ -61,6 +70,52 @@ public class Game extends Activity {
             newGame = false;
             resetGame();
         }
+        RunAnimation(console);
+    }
+
+    private void RunAnimation(TextView x) {
+        class FlipListener implements ValueAnimator.AnimatorUpdateListener {
+            private final View mFrontView;
+            private final View mBackView;
+            private boolean mFlipped;
+
+            public FlipListener(final View front, final View back) {
+                this.mFrontView = front;
+                this.mBackView = back;
+                this.mBackView.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationUpdate(final ValueAnimator animation) {
+                final float value = animation.getAnimatedFraction();
+                final float scaleValue = 0.625f + (1.5f * (value - 0.5f) * (value - 0.5f));
+
+                if(value <= 0.5f){
+                    this.mFrontView.setRotationY(180 * value);
+                    this.mFrontView.setScaleX(scaleValue);
+                    this.mFrontView.setScaleY(scaleValue);
+                    if(mFlipped){
+                        setStateFlipped(false);
+                    }
+                } else {
+                    this.mBackView.setRotationY(-180 * (1f- value));
+                    this.mBackView.setScaleX(scaleValue);
+                    this.mBackView.setScaleY(scaleValue);
+                    if(!mFlipped){
+                        setStateFlipped(true);
+                    }
+                }
+            }
+
+            private void setStateFlipped(boolean flipped) {
+                mFlipped = flipped;
+                this.mFrontView.setVisibility(flipped ? View.INVISIBLE : View.VISIBLE);
+                this.mBackView.setVisibility(flipped ? View.VISIBLE : View.INVISIBLE);
+            }
+        }
+        ValueAnimator mFlipAnimator = ValueAnimator.ofFloat(0f, 1f);
+        mFlipAnimator.addUpdateListener(new FlipListener(x, x));
+        mFlipAnimator.start();
     }
 
     public static void setNewGame() {
@@ -151,9 +206,7 @@ public class Game extends Activity {
     /**
      * initialise views
      */
-    ColorStateList oldColors;
-
-    public void initializeViews() {
+       public void initializeViews() {
 
         txt1 = (TextView) findViewById(R.id.txt1);
         txt2 = (TextView) findViewById(R.id.txt2);
@@ -281,8 +334,11 @@ public class Game extends Activity {
                     timer.setText(milisUntilFinished / 1000 + "");
                 }
                 currentTime = milisUntilFinished;
+                if(milisUntilFinished%5000<=100){
+                    //TODO add a counter and change console message every click
+                    RunAnimation(console);
+                }
             }
-
             @Override
             public void onFinish() {
                 if (teamPlaying == NumOfTeams - 1) {
@@ -384,7 +440,10 @@ public class Game extends Activity {
      */
     public void updateScores() {
         for (int i = 0; i < NumOfTeams; i++) {
-            teamScores[i].setText(Scores[i] + "");
+            if(teamScores[i].getText().toString().compareTo(String.valueOf(Scores[i]))!=0) {
+                teamScores[i].setText(Scores[i] + "");
+                RunAnimation(teamScores[i]);
+            }
             if (mode == 1 && Scores[i] >= goalRounds) {
                 gameEnd();
                 return;
