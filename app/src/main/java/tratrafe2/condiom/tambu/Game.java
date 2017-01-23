@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -44,6 +45,7 @@ public class Game extends Activity {
     CountDownTimer cdt;
     ColorStateList oldColors;
 
+    MediaPlayer mpTimer,mpCorrect,mpSkip,mpWrong,mpRound;
 
     ProgressBar pbar;
     LinearLayout llTeamNames, llTeamScores, llindicators, touchLayout;
@@ -260,6 +262,12 @@ public class Game extends Activity {
      * //TODO me kapio tropo na kamoume ta indicators (rectangles) na exoun to size tou onomatos tis omadas.
      */
     public void initializeVariables() {
+        mpTimer = MediaPlayer.create(this, R.raw.timer);
+        mpCorrect = MediaPlayer.create(this, R.raw.correct);
+        mpWrong = MediaPlayer.create(this, R.raw.wrong);
+        mpSkip = MediaPlayer.create(this, R.raw.skip);
+        mpRound = MediaPlayer.create(this, R.raw.round);
+
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
         lp.weight = 1.0f;
@@ -314,10 +322,7 @@ public class Game extends Activity {
      * @param milis
      */
     public void startCounter(long milis) {
-
         timer.setTextColor(oldColors);
-        if (milis >= 10000)
-            pbar.setVisibility(View.VISIBLE);
         cdt = new CountDownTimer((int) (milis), 10) {
             @Override
             public void onTick(long milisUntilFinished) {
@@ -330,7 +335,12 @@ public class Game extends Activity {
                     pbar.setVisibility(View.INVISIBLE);
                     timer.setTextColor(Color.BLACK);
                     timer.setText(String.format("%d:%03d", milisUntilFinished / 1000, milisUntilFinished % 1000));
+                    if((milisUntilFinished/1000<3)&&(milisUntilFinished%500<=100)) {
+                        mpTimer.start();
+                    }else if((milisUntilFinished%1000<=100)&&(milisUntilFinished/1000>0))
+                        mpTimer.start();
                 } else {
+                    pbar.setVisibility(View.VISIBLE);
                     timer.setText(milisUntilFinished / 1000 + "");
                 }
                 currentTime = milisUntilFinished;
@@ -341,6 +351,7 @@ public class Game extends Activity {
             }
             @Override
             public void onFinish() {
+                mpRound.start();
                 if (teamPlaying == NumOfTeams - 1) {
                     rounds++;
                     if (mode == 0) {
@@ -482,6 +493,7 @@ public class Game extends Activity {
      * Wrong Click
      */
     public void WrongClick(View v) {
+        mpWrong.start();
         if (wrongPoints == -1) {
             Scores[teamPlaying]--;
         } else if (wrongPoints == 1) {
@@ -502,6 +514,7 @@ public class Game extends Activity {
      * Skip Click
      */
     public void SkipClick(View v) {
+        mpSkip.start();
         if (skipPoints == -1) {
             Scores[teamPlaying]--;
         } else if (skipPoints == 1) {
@@ -522,6 +535,7 @@ public class Game extends Activity {
      * Correct Click
      */
     public void CorrectClick(View v) {
+        mpCorrect.start();
         Scores[teamPlaying]++;
         updateScores();
         selectNewCard();

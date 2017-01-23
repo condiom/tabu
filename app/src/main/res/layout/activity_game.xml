@@ -276,7 +276,7 @@
                     android:layout_weight="1"
                     android:onClick="WrongClick"
                     android:text="Wrong"
-                    android:background="@drawable/button_rect"/>
+                    android:background="@drawable/button_rect" />
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
