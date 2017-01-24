@@ -418,6 +418,7 @@ public class Game extends Activity {
      * When a team wins
      */
     private void gameEnd() {
+        cdt.cancel();
                 //Insertion Sort (fast enough for maximum 6 values)
         for (int i = 1; i < Scores.length; i++) {
             int temp = Scores[i];
