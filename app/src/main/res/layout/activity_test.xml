@@ -16,39 +16,45 @@
         android:layout_height="match_parent"
         android:id="@+id/frLayout">
 
-        <Button
-            android:text="Button"
+        <RadioButton
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnTest4"
-            android:onClick="btnClick"/>
+            android:onClick="btnClick"
+            android:textColorLink="@android:color/holo_green_dark" />
 
-        <Button
-            android:text="Button"
+        <RadioButton
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnTest3"
-            android:onClick="btnClick"/>
+            android:onClick="btnClick"
+            android:textColorLink="?attr/colorPrimaryDark" />
 
-        <Button
-            android:text="Button"
+        <RadioButton
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnTest2"
-            android:onClick="btnClick"/>
+            android:onClick="btnClick"
+            android:textColorLink="?android:attr/textColorHighlight" />
 
-        <Button
-            android:text="Button"
+        <RadioButton
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnTest1"
-            android:onClick="btnClick"/>
+            android:onClick="btnClick"
+            android:textColorHighlight="?android:attr/textColorHighlight" />
+
+
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical|center_horizontal">
+            android:gravity="bottom|center_horizontal">
 
             <TextView
                 android:text="TextView"
@@ -68,13 +74,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txtSpeed"/>
 
-            <TextView
-                android:text="Target"
+            <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtTestTarget"
-                android:textAlignment="viewEnd"
-                tools:layout_width="wrap_content"/>
+                android:gravity="center|start" />
 
             <SeekBar
                 android:layout_width="match_parent"

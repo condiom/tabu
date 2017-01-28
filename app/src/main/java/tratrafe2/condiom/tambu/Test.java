@@ -15,59 +15,26 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 public class Test extends Activity {
-   Button bt1,bt2,bt3,bt4;
+    View bt1,bt2,bt3,bt4;
    FrameLayout fr;
    CountDownTimer cdt;
-   Button b;
+    View tx;
+    View b;
    SeekBar sk;
    TextView txtSpeed;
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_test);
-      bt1 = (Button)findViewById(R.id.btnTest1);
-      bt2 = (Button)findViewById(R.id.btnTest2);
-      bt3 = (Button)findViewById(R.id.btnTest3);
-      bt4 = (Button)findViewById(R.id.btnTest4);
+      bt1 = (View)findViewById(R.id.btnTest1);
+      bt2 = (View)findViewById(R.id.btnTest2);
+      bt3 = (View)findViewById(R.id.btnTest3);
+      bt4 = (View)findViewById(R.id.btnTest4);
       sk=(SeekBar)findViewById(R.id.seekBar);
       fr=(FrameLayout)findViewById(R.id.frLayout);
       txtSpeed=(TextView)findViewById(R.id.txtSpeed);
-      final TextView tx = (TextView) findViewById(R.id.txtTestTarget);
-
-      cdt = new CountDownTimer(100000,1) {
-
-         @Override
-         public void onTick(long l) {
-            int speed=sk.getProgress();
-            txtSpeed.setText(speed+"");
-            if(b.getX()+b.getWidth()/2!=tx.getX()+tx.getWidth()/2){
-               if(b.getX()+b.getWidth()/2>tx.getX()+tx.getWidth()/2){
-                  b.setX(b.getX()-speed);
-               }
-               else{
-                  b.setX(b.getX()+speed);
-               }
-               if(Math.abs((b.getX()+b.getWidth()/2)-(tx.getX()+tx.getWidth()/2))<speed){
-                  b.setX((tx.getX()+tx.getWidth()/2)-b.getWidth()/2);
-               }
-
-            }
-            else{
-               if(b.getY()+b.getHeight()/2<tx.getY()+tx.getHeight()/2)
-                  b.setY(b.getY()+speed);
-               else{
-                  cdt.cancel();
-               }
-            }
 
 
-         }
-
-         @Override
-         public void onFinish() {
-
-         }
-      };
       fr.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
          @Override
          public void onGlobalLayout() {
@@ -88,8 +55,49 @@ public class Test extends Activity {
    }
 
    public void btnClick(View v){
-      b=(Button)v;
-      cdt.cancel();
+      b=v;
+       if(cdt!=null)
+       cdt.cancel();
+       tx = (View) findViewById(R.id.txtTestTarget);
+
+       cdt = new CountDownTimer(100000,1) {
+           float speed=sk.getProgress();
+           @Override
+           public void onTick(long l) {
+               speed+=0.1;
+               txtSpeed.setText(speed+"");
+               if(b.getX()+b.getWidth()/2!=tx.getX()+tx.getWidth()/2){
+                   if(b.getX()+b.getWidth()/2>tx.getX()+tx.getWidth()/2){
+                       b.setX(b.getX()-speed);
+                   }
+                   else{
+                       b.setX(b.getX()+speed);
+                   }
+                   b.setY(b.getY()+speed);
+                   if(Math.abs((b.getX()+b.getWidth()/2)-(tx.getX()+tx.getWidth()/2))<speed){
+                       b.setX((tx.getX()+tx.getWidth()/2)-b.getWidth()/2);
+                   }
+
+               }
+               else{
+
+                   if(b.getY()+b.getHeight()/2<tx.getY()+tx.getHeight()/2)
+                       b.setY(b.getY()+speed);
+                   else{
+                       b.setY(-b.getHeight()/2+tx.getY()+tx.getHeight()/2);
+                       cdt.cancel();
+                   }
+               }
+
+
+           }
+
+           @Override
+           public void onFinish() {
+
+           }
+       };
+
       cdt.start();
    }
 }
