@@ -1,37 +1,25 @@
 package tratrafe2.condiom.tambu;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
-
-import org.w3c.dom.Text;
 
 
 public class Game extends Activity {
@@ -75,6 +63,9 @@ public class Game extends Activity {
         RunAnimation(console);
     }
 
+    private void DropAnimation(TextView x){
+
+    }
     private void RunAnimation(TextView x) {
         class FlipListener implements ValueAnimator.AnimatorUpdateListener {
             private final View mFrontView;
