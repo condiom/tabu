@@ -36,6 +36,8 @@ public class MainMenu extends Activity {
         startActivity(intent);
     }
     public void Exit(View v){
+       Intent intent = new Intent(this, Test.class);
+       startActivity(intent);
        finish();
     }
     MainMenu that=this;
