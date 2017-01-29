@@ -24,10 +24,11 @@ import com.google.gson.Gson;
 
 public class Game extends Activity {
     final int MAXTEAMS = 6;
-    int MAXFILES = 2;
+    int MAXFILES = 13;
     int countFiles = 0;
     int teamPlaying = 0;
     int debug = 0;
+    String words="words_gr_";
     long currentTime = 0;
     static boolean newGame;
     CountDownTimer cdt;
@@ -165,14 +166,14 @@ public class Game extends Activity {
         indicators = new TextView[NumOfTeams];
         teamScores = new TextView[NumOfTeams];
         teamPlaying = sharedPref.getInt("teamPlaying", 0);
-        MAXFILES = sharedPref.getInt("MAXFILES", 2);
+        MAXFILES = sharedPref.getInt("MAXFILES", 13);
         countFiles = sharedPref.getInt("countFiles", 0);
         for (int i = 0; i < NumOfTeams; i++) {
             Scores[i] = sharedPref.getInt("teamScores" + i, 0);
         }
         index = sharedPref.getInt("index", -5);
         if (index == -5) {
-            int nextFile = getResources().getIdentifier("words" + (++countFiles), "raw", getPackageName());
+            int nextFile = getResources().getIdentifier(words + (++countFiles), "raw", getPackageName());
             cardArray = Card.initArray(this, nextFile);
             index = cardArray.length - 1;
             return;
@@ -474,7 +475,7 @@ public class Game extends Activity {
             } else {
                 //Toast.makeText(this, "Card pack: " + (countFiles) + " is done!", LENGTH_SHORT).show();
             }
-            int nextFile = getResources().getIdentifier("words" + (++countFiles), "raw", getPackageName());
+            int nextFile = getResources().getIdentifier(words + (++countFiles), "raw", getPackageName());
             cardArray = Card.initArray(this, nextFile);
             index = cardArray.length - 1;
         }
