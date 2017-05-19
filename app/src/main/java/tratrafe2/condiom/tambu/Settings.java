@@ -323,8 +323,8 @@ public class Settings extends Activity {
     }
 
     public void increaseTimeOnClick(View v) {
-        if (realTime == 13) { //TODO remove this line
-            realTime -= 13;
+        if (realTime == 3) { //TODO remove this line
+            realTime -= 3;
         }
         realTime += 30;
         if (realTime > MAXTIME) {
@@ -335,8 +335,8 @@ public class Settings extends Activity {
 
     public void reduceTimeOnClick(View v) {
         realTime -= 30;
-        if (realTime <= 13) { //TODO change to 30-30
-            realTime = 13;
+        if (realTime <= 3) { //TODO change to 30-30
+            realTime = 3;
         }
         txtTime.setText(String.valueOf(realTime));
     }

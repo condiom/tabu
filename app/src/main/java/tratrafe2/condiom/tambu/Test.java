@@ -45,6 +45,7 @@ public class Test extends Activity {
         txtSpeed = (TextView) findViewById(R.id.txtSpeed);
 
 
+
         fr.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -88,7 +89,7 @@ public class Test extends Activity {
         b = v;
         if (cdt != null)
             cdt.cancel();
-        tx = (View) findViewById(R.id.txtTestTarget);
+        tx = (View) findViewById(R.id.timerFL);
 
         cdt = new CountDownTimer(100000, 1) {
             float speedX = sk.getProgress();

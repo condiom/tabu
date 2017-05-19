@@ -16,31 +16,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
-                android:gravity="center_vertical"
-                android:text="Gameplay:"
+                android:id="@+id/txt8"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:id="@+id/txt8"
+                android:gravity="center_vertical"
+                android:text="Gameplay:"
                 android:textSize="18sp"
                 android:textStyle="normal|bold" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:gravity="center_vertical"
+                    android:id="@+id/txt2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/txt2"
-                    android:textSize="18sp"
                     android:layout_weight="1"
-                    android:text="\t\t\tTime per round:" />
+                    android:gravity="center_vertical"
+                    android:text="\t\t\tTime per round:"
+                    android:textSize="18sp" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -49,104 +49,98 @@
                     android:foregroundGravity="center">
 
                     <TextView
-                        android:text="30"
+                        android:id="@+id/txtTime"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/txtTime"
-                        android:gravity="center"
                         android:layout_weight="1"
-                        />
+                        android:gravity="center"
+                        android:text="30" />
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                       >
+                        android:orientation="horizontal">
 
                         <ImageButton
+                            android:id="@+id/iBtnSubTime"
                             android:layout_width="match_parent"
                             android:layout_height="20sp"
-                            android:id="@+id/iBtnSubTime"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
                             android:background="@drawable/transparent"
                             android:onClick="reduceTimeOnClick"
-                            android:layout_weight="1"
-                            android:src="@drawable/minus"
                             android:scaleType="fitCenter"
-                            android:adjustViewBounds="true"/>
+                            android:src="@drawable/minus" />
 
                         <ImageButton
+                            android:id="@+id/iBtnAddTime"
                             android:layout_width="match_parent"
                             android:layout_height="20sp"
-                            android:id="@+id/iBtnAddTime"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
                             android:background="@drawable/transparent"
                             android:onClick="increaseTimeOnClick"
-                            android:layout_weight="1"
-                            android:src="@drawable/plus"
                             android:scaleType="fitCenter"
-                            android:adjustViewBounds="true"/>
+                            android:src="@drawable/plus" />
 
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-               >
+                android:orientation="horizontal">
 
                 <TextView
-                    android:gravity="center_vertical"
+                    android:id="@+id/txt1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/txt1"
-                    android:textSize="18sp"
-                    android:text="\t\t\tNumber of Teams:"
                     android:layout_weight="1"
-                />
+                    android:gravity="center_vertical"
+                    android:text="\t\t\tNumber of Teams:"
+                    android:textSize="18sp" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    >
+                    android:layout_weight="1">
 
                     <TextView
-                        android:text="5"
+                        android:id="@+id/txtTeamNum"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/txtTeamNum"
                         android:layout_weight="1"
                         android:gravity="center"
-                        />
+                        android:text="5" />
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
                         <ImageButton
+                            android:id="@+id/iBtnSubTeam"
                             android:layout_width="match_parent"
                             android:layout_height="20sp"
-                            android:id="@+id/iBtnSubTeam"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
                             android:background="@drawable/transparent"
                             android:onClick="reduceTeamOnClick"
-                            android:layout_weight="1"
-                            android:src="@drawable/minus"
                             android:scaleType="fitCenter"
-                            android:adjustViewBounds="true"/>
+                            android:src="@drawable/minus" />
 
                         <ImageButton
+                            android:id="@+id/iBtnAddTeam"
                             android:layout_width="match_parent"
                             android:layout_height="20sp"
-                            android:id="@+id/iBtnAddTeam"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
                             android:background="@drawable/transparent"
                             android:onClick="increaseTeamOnClick"
-                            android:layout_weight="1"
-                            android:src="@drawable/plus"
                             android:scaleType="fitCenter"
-                            android:adjustViewBounds="true"/>
+                            android:src="@drawable/plus" />
                     </LinearLayout>
 
                 </FrameLayout>
@@ -155,11 +149,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
+                android:id="@+id/llteamNames"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.04"
-                android:id="@+id/llteamNames">
+                android:orientation="vertical">
 
             </LinearLayout>
 
@@ -169,30 +163,30 @@
                 android:background="@android:color/darker_gray" />
 
             <TextView
+                android:id="@+id/txt2.5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="Points System:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/txt2.5"
                 android:textSize="18sp"
-                android:layout_weight="1"
-                android:textStyle="normal|bold"/>
+                android:textStyle="normal|bold" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/txt3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/txt3"
-                    android:textSize="18sp"
-                    android:text="\t\t\tWrong:"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:text="\t\t\tWrong:"
+                    android:textSize="18sp" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -201,40 +195,40 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/txtWrong"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/txtWrong"
                         android:layout_weight="1"
-                        android:textAlignment="center"
+                        android:gravity="center"
                         android:text="+2 testing"
-                        android:gravity="center"/>
+                        android:textAlignment="center" />
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
                         <ImageButton
+                            android:id="@+id/iBtnSubWrong"
                             android:layout_width="match_parent"
                             android:layout_height="20sp"
-                            android:id="@+id/iBtnSubWrong"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
                             android:background="@drawable/transparent"
                             android:onClick="reduceWrongOnClick"
-                            android:layout_weight="1"
-                            android:src="@drawable/minus"
                             android:scaleType="fitCenter"
-                            android:adjustViewBounds="true"/>
+                            android:src="@drawable/minus" />
 
                         <ImageButton
+                            android:id="@+id/iBtnAddWrong"
                             android:layout_width="match_parent"
                             android:layout_height="20sp"
-                            android:id="@+id/iBtnAddWrong"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
                             android:background="@drawable/transparent"
                             android:onClick="increaseWrongOnClick"
-                            android:layout_weight="1"
-                            android:src="@drawable/plus"
                             android:scaleType="fitCenter"
-                            android:adjustViewBounds="true"/>
+                            android:src="@drawable/plus" />
                     </LinearLayout>
 
                 </FrameLayout>
@@ -242,20 +236,19 @@
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                >
+                android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/txt4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/txt4"
-                    android:textSize="18sp"
-                    android:text="\t\t\tSkip:"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:text="\t\t\tSkip:"
+                    android:textSize="18sp" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -264,39 +257,39 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/txtSkip"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/txtSkip"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="+2 testing" />
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
                         <ImageButton
+                            android:id="@+id/iBtnSubSkip"
                             android:layout_width="match_parent"
                             android:layout_height="20sp"
-                            android:id="@+id/iBtnSubSkip"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
                             android:background="@drawable/transparent"
                             android:onClick="reduceSkipOnClick"
-                            android:layout_weight="1"
-                            android:src="@drawable/minus"
                             android:scaleType="fitCenter"
-                            android:adjustViewBounds="true"/>
+                            android:src="@drawable/minus" />
 
                         <ImageButton
+                            android:id="@+id/iBtnAddSkip"
                             android:layout_width="match_parent"
                             android:layout_height="20sp"
-                            android:id="@+id/iBtnAddSkip"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
                             android:background="@drawable/transparent"
                             android:onClick="increaseSkipOnClick"
-                            android:layout_weight="1"
-                            android:src="@drawable/plus"
                             android:scaleType="fitCenter"
-                            android:adjustViewBounds="true"/>
+                            android:src="@drawable/plus" />
                     </LinearLayout>
 
                 </FrameLayout>
@@ -309,66 +302,65 @@
                 android:background="@android:color/darker_gray" />
 
             <TextView
-                android:text="Ending:"
-                android:gravity="center_vertical"
+                android:id="@+id/txt9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txt9"
+                android:gravity="center_vertical"
+                android:text="Ending:"
                 android:textSize="18sp"
                 android:textStyle="normal|bold" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.04">
+                android:layout_weight="0.04"
+                android:orientation="horizontal">
 
                 <RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.04" >
+                    android:layout_weight="0.04">
 
                     <RadioButton
-                        android:gravity="center_vertical"
-                        android:text="Max Rounds:"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:id="@+id/btnRounds"
-                        android:duplicateParentState="false"
-                        android:textSize="18sp"
-                        android:checked="false"
-                        android:onClick="onRadioButtonClicked" />
-
-                    <RadioButton
-                        android:gravity="center_vertical"
-                        android:text="Goal Points:"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/btnGoal"
                         android:checked="false"
                         android:duplicateParentState="false"
-                        android:textSize="18sp"
+                        android:gravity="center_vertical"
                         android:onClick="onRadioButtonClicked"
-                        android:layout_weight="0.04" />
+                        android:text="Max Rounds:"
+                        android:textSize="18sp" />
 
                     <RadioButton
-                        android:gravity="center_vertical"
-                        android:text="Infinite Game:"
+                        android:id="@+id/btnGoal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/btnInfinite"
                         android:layout_weight="0.04"
-                        android:textSize="18sp"
-                        android:onClick="onRadioButtonClicked"/>
+                        android:checked="false"
+                        android:duplicateParentState="false"
+                        android:gravity="center_vertical"
+                        android:onClick="onRadioButtonClicked"
+                        android:text="Goal Points:"
+                        android:textSize="18sp" />
+
+                    <RadioButton
+                        android:id="@+id/btnInfinite"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.04"
+                        android:gravity="center_vertical"
+                        android:onClick="onRadioButtonClicked"
+                        android:text="Infinite Game:"
+                        android:textSize="18sp" />
 
                 </RadioGroup>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.04"
-                    >
+                    android:orientation="vertical">
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -376,44 +368,42 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:text="50"
+                            android:id="@+id/txtMaxRounds"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:id="@+id/txtMaxRounds"
-                            android:textAlignment="center"
-                            android:gravity="center_vertical"
                             android:layout_weight="1"
-                            />
+                            android:gravity="center_vertical"
+                            android:text="50"
+                            android:textAlignment="center" />
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="center_vertical"
                             android:layout_weight="1"
-                            >
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <ImageButton
+                                android:id="@+id/iBtnSubMax"
                                 android:layout_width="match_parent"
                                 android:layout_height="20sp"
-                                android:id="@+id/iBtnSubMax"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
                                 android:background="@drawable/transparent"
                                 android:onClick="reduceMaxOnClick"
-                                android:layout_weight="1"
-                                android:src="@drawable/minus"
                                 android:scaleType="fitCenter"
-                                android:adjustViewBounds="true"/>
+                                android:src="@drawable/minus" />
 
                             <ImageButton
+                                android:id="@+id/iBtnAddMax"
                                 android:layout_width="match_parent"
                                 android:layout_height="20sp"
-                                android:id="@+id/iBtnAddMax"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
                                 android:background="@drawable/transparent"
                                 android:onClick="increaseMaxOnClick"
-                                android:layout_weight="1"
-                                android:src="@drawable/plus"
                                 android:scaleType="fitCenter"
-                                android:adjustViewBounds="true"/>
+                                android:src="@drawable/plus" />
 
                         </LinearLayout>
                     </FrameLayout>
@@ -424,74 +414,74 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:text="100"
+                            android:id="@+id/txtGoalPoints"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:id="@+id/txtGoalPoints"
-                            android:textAlignment="center"
                             android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="100"
 
-                            android:gravity="center_vertical"/>
+                            android:textAlignment="center" />
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:layout_weight="1">
+                            android:orientation="horizontal">
 
                             <ImageButton
+                                android:id="@+id/iBtnGoal"
                                 android:layout_width="match_parent"
                                 android:layout_height="20sp"
-                                android:id="@+id/iBtnGoal"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
                                 android:background="@drawable/transparent"
                                 android:onClick="reduceGoalOnClick"
-                                android:layout_weight="1"
-                                android:src="@drawable/minus"
                                 android:scaleType="fitCenter"
-                                android:adjustViewBounds="true"/>
+                                android:src="@drawable/minus" />
 
                             <ImageButton
+                                android:id="@+id/iBtnAddGoal"
                                 android:layout_width="match_parent"
                                 android:layout_height="20sp"
-                                android:id="@+id/iBtnAddGoal"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
                                 android:background="@drawable/transparent"
                                 android:onClick="increaseGoalOnClick"
-                                android:layout_weight="1"
-                                android:src="@drawable/plus"
                                 android:scaleType="fitCenter"
-                                android:adjustViewBounds="true"/>
+                                android:src="@drawable/plus" />
 
                         </LinearLayout>
                     </FrameLayout>
 
                     <TextView
+                        android:id="@+id/textView4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/textView4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <Button
-                android:text="Save and Exit"
+                android:id="@+id/btnSaveAndExit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnSaveAndExit"
                 android:layout_weight="0.04"
+                android:elevation="0dp"
                 android:onClick="saveAndExitClick"
-                tools:text="Save and Exit"
-                android:elevation="0dp" />
+                android:text="Save and Exit"
+                tools:text="Save and Exit" />
 
             <Button
-                android:text="Exit"
+                android:id="@+id/btnExit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnExit"
                 android:layout_weight="0.04"
-                android:onClick="exitClickS" />
+                android:onClick="exitClickS"
+                android:text="Exit" />
 
         </LinearLayout>
     </ScrollView>

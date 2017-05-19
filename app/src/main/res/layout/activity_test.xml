@@ -18,44 +18,43 @@
         android:layout_alignParentStart="true">
 
         <ImageView
+            android:id="@+id/btnTest1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_ball"
+            android:onClick="btnClick"
+            app:srcCompat="@drawable/circle_ball" />
+
+        <ImageView
+            android:id="@+id/btnTest2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_ball"
+            android:onClick="btnClick"
+            app:srcCompat="@drawable/circle_ball" />
+
+        <ImageView
+            android:id="@+id/btnTest3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_ball"
+            android:onClick="btnClick"
+            app:srcCompat="@drawable/circle_ball" />
+
+        <ImageView
+            android:id="@+id/btnTest4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_ball"
+            android:onClick="btnClick"
+            app:srcCompat="@drawable/circle_ball" />
+
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@color/colorPrimaryDark"
             android:id="@+id/img1"
             android:visibility="invisible"/>
-
-        <RadioButton
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnTest4"
-            android:onClick="btnClick"
-            android:textColorLink="@android:color/holo_green_dark" />
-
-        <RadioButton
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnTest3"
-            android:onClick="btnClick"
-            android:textColorLink="?attr/colorPrimaryDark" />
-
-        <RadioButton
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnTest2"
-            android:onClick="btnClick"
-            android:textColorLink="?android:attr/textColorHighlight" />
-
-        <RadioButton
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnTest1"
-            android:onClick="btnClick"
-            android:textColorHighlight="?android:attr/textColorHighlight" />
-
 
         <LinearLayout
             android:orientation="vertical"

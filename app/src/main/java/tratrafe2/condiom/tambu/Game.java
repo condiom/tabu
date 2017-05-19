@@ -1,5 +1,6 @@
 package tratrafe2.condiom.tambu;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -8,17 +9,26 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.RequiresApi;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 
 
@@ -48,12 +58,39 @@ public class Game extends Activity {
     Card cardArray[];
     String teamNamesStr[], winingTeam;
 
+
+    //CIRCLES
+    View bt1, bt2, bt3, bt4;
+    FrameLayout fr;
+    CountDownTimer cdt2;
+    View tx;
+    View b;
+    private float x1, x2, y1, y2;
+    static final int MIN_DISTANCE = 150;
+    static final int MIN_NEG_DISTANCE = -150;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        bt1 = (View) findViewById(R.id.btnTest1);
+        bt2 = (View) findViewById(R.id.btnTest2);
+        bt3 = (View) findViewById(R.id.btnTest3);
+        bt4 = (View) findViewById(R.id.btnTest4);
+        fr = (FrameLayout) findViewById(R.id.frLayout);
+        fr.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                fr.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                float pos = fr.getWidth() / 4;
+                float space = (pos - bt1.getWidth()) / 2;
+                bt1.setX(0 + space);
+                bt2.setX(pos + space);
+                bt3.setX(2 * pos + space);
+                bt4.setX(3 * pos + space);
 
-
+            }
+        });
         getSettings();
         initializeViews();
         initializeVariables();
@@ -323,18 +360,7 @@ public class Game extends Activity {
                 } else {
                     pbar.setProgress(pbar.getProgress() + 1);
                 }
-                if (milisUntilFinished / 1000 < 10) {
-                    pbar.setVisibility(View.INVISIBLE);
-                    timer.setTextColor(Color.BLACK);
-                    timer.setText(String.format("%d:%03d", milisUntilFinished / 1000, milisUntilFinished % 1000));
-                    if((milisUntilFinished/1000<3)&&(milisUntilFinished%500<=100)) {
-                        mpTimer.start();
-                    }else if((milisUntilFinished%1000<=100)&&(milisUntilFinished/1000>0))
-                        mpTimer.start();
-                } else {
-                    pbar.setVisibility(View.VISIBLE);
-                    timer.setText(milisUntilFinished / 1000 + "");
-                }
+                timer.setText(milisUntilFinished / 1000 + "");
                 currentTime = milisUntilFinished;
                 if(milisUntilFinished%5000<=100){
                     //TODO add a counter and change console message every click
@@ -359,47 +385,27 @@ public class Game extends Activity {
                 btnSkip.setEnabled(false);
                 currentTime = realTime * 1000;
 
-                timer.setText("TIME'S UP");
-                Animation anim = new AlphaAnimation(0.0f, 1.0f);
-                anim.setDuration(200); //You can manage the time of the blink with this parameter
-                anim.setStartOffset(0);
-                anim.setRepeatMode(Animation.REVERSE);
-                anim.setRepeatCount(10);
-                timer.startAnimation(anim);
-                anim.setAnimationListener(new Animation.AnimationListener() {
+                timer.setTextColor(oldColors);
+                pbar.setVisibility(View.VISIBLE);
+                pbar.setProgress(60);
+                showT(findViewById(R.id.timerFL));
+                timer.setText("" + realTime);
+                txt1.setText("");
+                txt2.setText("");
+                txt3.setText("");
+                txt4.setText("");
+                txt5.setText("");
+                txtMain.setText("Tap to START!");
+                console.setText("Round " + rounds + ": " + teamNamesStr[teamPlaying] + "'s turn!");
+                for (int i = 0; i < indicators.length; i++) {
+                    indicators[i].setVisibility(View.INVISIBLE);
+                }
+                indicators[teamPlaying].setVisibility(View.VISIBLE);
+                touchLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation arg0) {
-                        //TODO INSERT "TOUCH HERE TO START"
-                        timer.setTextColor(oldColors);
-                        pbar.setVisibility(View.VISIBLE);
-                        pbar.setProgress(60);
-                        timer.setText("" + realTime);
-                        txt1.setText("");
-                        txt2.setText("");
-                        txt3.setText("");
-                        txt4.setText("");
-                        txt5.setText("");
-                        txtMain.setText("Tap to START!");
-                        console.setText("Round " + rounds + ": " + teamNamesStr[teamPlaying] + "'s turn!");
-                        for (int i = 0; i < indicators.length; i++) {
-                            indicators[i].setVisibility(View.INVISIBLE);
-                        }
-                        indicators[teamPlaying].setVisibility(View.VISIBLE);
-                        touchLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                startClick();
-                                touchLayout.setOnClickListener(null);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
+                    public void onClick(View view) {
+                        startClick();
+                        touchLayout.setOnClickListener(null);
                     }
                 });
             }
@@ -603,5 +609,101 @@ public class Game extends Activity {
             editor.putInt("teamScores" + i, Scores[i]);
         }
         editor.commit();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void showT(View v) {
+        // previously invisible view
+        View myView = findViewById(R.id.img1);
+
+        // get the center for the clipping circle
+        int cx = (int) (v.getX() + v.getWidth() / 2);
+        int cy = (int) (v.getY() + v.getHeight() / 2);
+
+
+        // get the final radius for the clipping circle
+        float finalRadius = (float) Math.hypot(cx, cy);
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
+
+        // make the view visible and start the animation
+        myView.setVisibility(View.VISIBLE);
+        anim.setDuration(1000);
+        anim.start();
+    }
+
+    public void btnClick(View v) {
+        b = v;
+        if (cdt2 != null)
+            cdt2.cancel();
+        tx = (View) findViewById(R.id.timerFL);
+
+        cdt2 = new CountDownTimer(100000, 1) {
+            float speedX = 6f;
+            float speed = 6f;
+
+            @Override
+            public void onTick(long l) {
+                speed += 0.1;
+                if (b.getX() + b.getWidth() / 2 != tx.getX() + tx.getWidth() / 2) {
+                    if (b.getX() + b.getWidth() / 2 > tx.getX() + tx.getWidth() / 2) {
+                        b.setX(b.getX() - speedX);
+                    } else {
+                        b.setX(b.getX() + speedX);
+                    }
+                    b.setY(b.getY() + speed);
+                    if (Math.abs((b.getX() + b.getWidth() / 2) - (tx.getX() + tx.getWidth() / 2)) < speed) {
+                        b.setX((tx.getX() + tx.getWidth() / 2) - b.getWidth() / 2);
+                    }
+
+                } else {
+
+                    if (b.getY() + b.getHeight() / 2 < tx.getY() + tx.getHeight() / 2)
+                        b.setY(b.getY() + speed);
+                    else {
+                        b.setY(-b.getHeight() / 2 + tx.getY() + tx.getHeight() / 2);
+                        cdt2.cancel();
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
+
+        cdt2.start();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                y2 = event.getY();
+                float deltaX = x2 - x1;
+                float deltaY = y2 - y1;
+                if ((deltaX > MIN_DISTANCE) && (Math.abs(deltaY) < MIN_DISTANCE)) {
+                    Toast.makeText(this, "left2right swipe", Toast.LENGTH_SHORT).show();
+                } else if ((deltaX < MIN_NEG_DISTANCE) && (Math.abs(deltaY) < MIN_DISTANCE)) {
+                    Toast.makeText(this, "right2left swipe", Toast.LENGTH_SHORT).show();
+                } else if ((Math.abs(deltaX) < MIN_DISTANCE) && (deltaY > MIN_DISTANCE)) {
+                    Toast.makeText(this, "up2down swipe", Toast.LENGTH_SHORT).show();
+                } else if ((Math.abs(deltaX) < MIN_DISTANCE) && (deltaY < MIN_NEG_DISTANCE)) {
+                    Toast.makeText(this, "down2up swipe", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 }
