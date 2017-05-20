@@ -50,7 +50,7 @@ public class End extends Activity {
             }
 
             int score = sharedPref.getInt("finalScores" + i, -1);
-            String name = sharedPref.getString("teamNames" + i, "ERROR");
+            String name = sharedPref.getString("teamBalls" + i, "ERROR");
             txts[i].setText((counter++) + ".\t\t" + name + "\t\t" + score);
             if (i != number - 1) {
                 llwin.addView(txts[i]);
