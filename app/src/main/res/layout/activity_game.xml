@@ -8,6 +8,11 @@
     android:id="@+id/RelativeLayout">
 
     <ImageView
+        android:id="@+id/img2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+    <ImageView
         android:id="@+id/img1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -315,7 +320,7 @@
             <FrameLayout
                 android:id="@+id/timerFL"
                 android:layout_width="match_parent"
-                android:layout_height="33dp">
+                android:layout_height="50dp">
 
 
                 <RelativeLayout

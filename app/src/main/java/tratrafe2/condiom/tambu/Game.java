@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -31,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+
+import java.util.Random;
 
 
 public class Game extends Activity {
@@ -48,14 +51,14 @@ public class Game extends Activity {
     MediaPlayer mpTimer,mpCorrect,mpSkip,mpWrong,mpRound;
 
     ProgressBar pbar;
-    LinearLayout llTeamNames, llTeamScores, llindicators, touchLayout;
+    LinearLayout llTeamNames, llindicators, touchLayout;
     TextView console, timer, txt1, txt2, txt3, txt4, txt5, txtMain;
-    TextView teamScores[], indicators[];
-    ImageView teamBalls[];
+    TextView indicators[];
+    TextView teamBalls[];
     Button btnWrong, btnSkip, btnCorrect, btnNewGame;
     ImageButton btnPause;
 
-    int Scores[];
+    int Scores[],colors[];
     int currentCard, realTime, NumOfTeams, wrongPoints, skipPoints, goal, rounds, index, mode, maxRounds, goalRounds;
     Card cardArray[];
     String teamNamesStr[], winingTeam;
@@ -182,9 +185,9 @@ public class Game extends Activity {
             }
         }
         Scores = new int[NumOfTeams];
-        teamBalls = new ImageView[NumOfTeams];
+        teamBalls = new TextView[NumOfTeams];
+        colors = new int[NumOfTeams];
         indicators = new TextView[NumOfTeams];
-        teamScores = new TextView[NumOfTeams];
         teamPlaying = sharedPref.getInt("teamPlaying", 0);
         MAXFILES = sharedPref.getInt("MAXFILES", 13);
         countFiles = sharedPref.getInt("countFiles", 0);
@@ -234,7 +237,6 @@ public class Game extends Activity {
         btnSkip = (Button) findViewById(R.id.btnSkip);
         btnWrong = (Button) findViewById(R.id.btnWrong);
         llTeamNames = (LinearLayout) findViewById(R.id.llteamNames);
-        llTeamScores = (LinearLayout) findViewById(R.id.llteamScores);
         llindicators = (LinearLayout) findViewById(R.id.llindicators);
         touchLayout = (LinearLayout) findViewById(R.id.TouchLayout);
         btnCorrect.setEnabled(false);
@@ -271,7 +273,7 @@ public class Game extends Activity {
 
     /**
      * initialise Variables
-     * //TODO me kapio tropo na kamoume ta indicators (rectangles) na exoun to size tou onomatos tis omadas.
+     *
      */
     public void initializeVariables() {
         mpTimer = MediaPlayer.create(this, R.raw.timer);
@@ -288,15 +290,16 @@ public class Game extends Activity {
         //Insert team names
         for (int i = 0; i < NumOfTeams; i++) {
             final int j=i;
-            teamBalls[i] = new ImageView(this);
-            teamBalls[i].setImageResource(R.drawable.circle_ball);
-            GradientDrawable sd = (GradientDrawable)  teamBalls[i].getDrawable().mutate();
-            sd.setColor(Color.parseColor("#CCC111")); //TODO ADD COLOR BASED ON TEAM
-            Drawable ssd=(Drawable)sd;
+            teamBalls[i] = new TextView(this);
+            teamBalls[i].setBackgroundResource(R.drawable.circle_ball);
+            GradientDrawable sd = (GradientDrawable)  teamBalls[i].getBackground().mutate();
+            Random rnd = new Random();
+            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            colors[i]=color;
+            sd.setColor(color); //TODO ADD COLOR BASED ON TEAM
 
-            teamScores[i] = new TextView(this);
-            teamScores[i].setText(Scores[i] + "");
-            teamScores[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            teamBalls[i].setText(Scores[i] + "");
+            teamBalls[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
             indicators[i] = new TextView(this);
             indicators[i].setBackgroundResource(R.drawable.rectangle_shape);
@@ -304,11 +307,10 @@ public class Game extends Activity {
             indicators[i].setVisibility(View.INVISIBLE);
 
             teamBalls[i].setLayoutParams(lp);
-            teamScores[i].setLayoutParams(lp);
+            teamBalls[i].setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             indicators[i].setLayoutParams(lp);
 
             fr.addView(teamBalls[i]);
-            llTeamScores.addView(teamScores[i]);
             llindicators.addView(indicators[i]);
         }
         fr.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -448,9 +450,9 @@ public class Game extends Activity {
      */
     public void updateScores() {
         for (int i = 0; i < NumOfTeams; i++) {
-            if(teamScores[i].getText().toString().compareTo(String.valueOf(Scores[i]))!=0) {
-                teamScores[i].setText(Scores[i] + "");
-                RunAnimation(teamScores[i]);
+            if(teamBalls[i].getText().toString().compareTo(String.valueOf(Scores[i]))!=0) {
+                teamBalls[i].setText(Scores[i] + "");
+                RunAnimation(teamBalls[i]);
             }
             if (mode == 1 && Scores[i] >= goalRounds) {
                 gameEnd();
@@ -639,8 +641,17 @@ public class Game extends Activity {
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                ColorDrawable cd=new ColorDrawable();
+                cd.setColor(colors[teamPlaying]);
+                ((ImageView)findViewById(R.id.img2)).setImageDrawable(cd);
+                ((ImageView)findViewById(R.id.img1)).setVisibility(View.INVISIBLE);
                 b.setX(x);
                 b.setY(y);
+                ((GradientDrawable ) ((TextView)b).getBackground()).setStroke(3,Color.BLACK,0,0);
+                int last=teamPlaying-1;
+                if(last==-1)
+                    last=NumOfTeams-1;
+                ((GradientDrawable ) ((TextView)teamBalls[last]).getBackground()).setStroke(0,Color.BLACK,0,0);
             }
 
             @Override
@@ -671,7 +682,7 @@ public class Game extends Activity {
 
             @Override
             public void onTick(long l) {
-                speed += 0.2f;
+                speed += 0.1f;
                 if (b.getX() + b.getWidth() / 2 != finalX) {
                     if (b.getX() + b.getWidth() / 2 > finalX) {
                         b.setX(b.getX() - speedX);
@@ -690,27 +701,13 @@ public class Game extends Activity {
                     else {
                         b.setY(-b.getHeight() / 2 + tx.getY() + tx.getHeight() / 2);
                         cdt2.cancel();
-
-
-                     //   GradientDrawable sd = (GradientDrawable)  teamBalls[i].getDrawable().mutate();
-                     //   sd.setColor(Color.parseColor("#CCC111")); //TODO ADD COLOR BASED ON TEAM
-                     //   Drawable ssd=(Drawable)sd;
-
-                        ColorDrawable cd=new ColorDrawable();
-                        cd.setColor(Color.parseColor("#CCC111"));
-
-
-                        ((ImageView)findViewById(R.id.img1)).setImageDrawable(cd);
-                        revealCircle(b,R.id.img1,oldX,oldY);
-
-
-
+                        ColorDrawable cd = new ColorDrawable();
+                        cd.setColor(colors[teamPlaying]);
+                        ((ImageView) findViewById(R.id.img1)).setImageDrawable(cd);
+                        revealCircle(b, R.id.img1, oldX, oldY);
                     }
                 }
-
-
             }
-
             @Override
             public void onFinish() {
             }
