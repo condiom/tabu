@@ -73,7 +73,7 @@ public class Game extends Activity {
     private float x1, x2, y1, y2;
     static final int MIN_DISTANCE = 150;
     static final int MIN_NEG_DISTANCE = -150;
-
+    boolean readyToStart=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +88,7 @@ public class Game extends Activity {
             resetGame();
         }
         RunAnimation(console);
+
     }
 
     private void RunAnimation(TextView x) {
@@ -151,7 +152,7 @@ public class Game extends Activity {
         txt3.setText("");
         txt4.setText("");
         txt5.setText("");
-        txtMain.setText("Tap to START!");
+        txtMain.setText("");
         timer.setTextColor(oldColors);
         pbar.setVisibility(View.VISIBLE);
         pbar.setProgress(60);
@@ -178,15 +179,26 @@ public class Game extends Activity {
         goalRounds = sharedPref.getInt("goalRounds", 100);
         currentTime = sharedPref.getLong("currentTime", realTime * 1000);
         teamNamesStr = new String[MAXTEAMS];
+
         for (int i = 0; i < MAXTEAMS; i++) {
             teamNamesStr[i] = sharedPref.getString("team" + i, "team " + i);
             if (teamNamesStr[i].compareTo("") == 0) {
                 teamNamesStr[i] = "team " + i;
             }
+
         }
+       int colorsTemp[]=new int[MAXTEAMS];
+       colors = new int[MAXTEAMS];
+       Random rnd = new Random();
+       for (int i = 0; i < MAXTEAMS; i++) {
+          colorsTemp[i]=sharedPref.getInt("colors" + i, Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
+       }
+       for (int i = 0; i < MAXTEAMS; i++) {
+          int temp=sharedPref.getInt("teamColor" + i, i);
+          colors[i]=colorsTemp[temp];
+       }
         Scores = new int[NumOfTeams];
         teamBalls = new TextView[NumOfTeams];
-        colors = new int[NumOfTeams];
         indicators = new TextView[NumOfTeams];
         teamPlaying = sharedPref.getInt("teamPlaying", 0);
         MAXFILES = sharedPref.getInt("MAXFILES", 13);
@@ -223,7 +235,7 @@ public class Game extends Activity {
     /**
      * initialise views
      */
-       public void initializeViews() {
+    public void initializeViews() {
 
         txt1 = (TextView) findViewById(R.id.txt1);
         txt2 = (TextView) findViewById(R.id.txt2);
@@ -251,7 +263,7 @@ public class Game extends Activity {
         txt3.setText("");
         txt4.setText("");
         txt5.setText("");
-        txtMain.setText("Tap to START!");
+        txtMain.setText("");
         if (currentTime / 1000 < 10) {
             pbar.setVisibility(View.INVISIBLE);
             timer.setTextColor(Color.BLACK);
@@ -265,6 +277,9 @@ public class Game extends Activity {
         touchLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!readyToStart){
+                   return;
+                }
                 startClick();
                 touchLayout.setOnClickListener(null);
             }
@@ -293,10 +308,7 @@ public class Game extends Activity {
             teamBalls[i] = new TextView(this);
             teamBalls[i].setBackgroundResource(R.drawable.circle_ball);
             GradientDrawable sd = (GradientDrawable)  teamBalls[i].getBackground().mutate();
-            Random rnd = new Random();
-            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-            colors[i]=color;
-            sd.setColor(color); //TODO ADD COLOR BASED ON TEAM
+            sd.setColor(colors[i]); //TODO ADD COLOR BASED ON TEAM
 
             teamBalls[i].setText(Scores[i] + "");
             teamBalls[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -323,6 +335,7 @@ public class Game extends Activity {
                     float myPos=1.0f*(pos+(2*space+2*pos)*i);
                     teamBalls[i].setX(myPos);
                 }
+               ballThrow(teamBalls[teamPlaying]);
             }
         });
         indicators[teamPlaying].setVisibility(View.VISIBLE);
@@ -394,7 +407,7 @@ public class Game extends Activity {
                 txt3.setText("");
                 txt4.setText("");
                 txt5.setText("");
-                txtMain.setText("Tap to START!");
+               txtMain.setText("");
                 console.setText("Round " + rounds + ": " + teamNamesStr[teamPlaying] + "'s turn!");
                 for (int i = 0; i < indicators.length; i++) {
                     indicators[i].setVisibility(View.INVISIBLE);
@@ -404,6 +417,9 @@ public class Game extends Activity {
                 touchLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                      if(!readyToStart){
+                         return;
+                      }
                         startClick();
                         touchLayout.setOnClickListener(null);
                     }
@@ -652,6 +668,8 @@ public class Game extends Activity {
                 if(last==-1)
                     last=NumOfTeams-1;
                 ((GradientDrawable ) ((TextView)teamBalls[last]).getBackground()).setStroke(0,Color.BLACK,0,0);
+               readyToStart=true;
+               txtMain.setText("Tap to START!");
             }
 
             @Override
@@ -669,6 +687,7 @@ public class Game extends Activity {
     }
 
     public void ballThrow(View v) {
+       readyToStart=false;
         b = v;
         final float oldX=b.getX();
         final float oldY=b.getY();

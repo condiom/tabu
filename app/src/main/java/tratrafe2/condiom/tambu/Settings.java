@@ -4,16 +4,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import java.util.Random;
+
 
 /**
  * Created by tratrafe2 on 12/01/2017.
@@ -34,11 +37,19 @@ public class Settings extends Activity {
     int teams = 0;
     String teamNamesAr[];
     LinearLayout[] tabs;
+    LinearLayout[] colorsLL;
+    int colors[];
+    int selectedColors[];
+    View colorViews[][];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        colors=new int[MAXTEAMS];
+        selectedColors=new int[MAXTEAMS];
+        colorViews=new View[MAXTEAMS][MAXTEAMS];
 
         maxRounds = 50;
         goalRounds = 100;
@@ -68,35 +79,9 @@ public class Settings extends Activity {
         }
         //Reading settings from file
         getValues();
-        temp = new TextView(this);
-        temp.setText("Team Names:");
-        temp.setTextSize(20);
-        //llTeamNames.addView(temp);
 
-        for (int j = 0; j < teams; j++) {
-            TextView txttab=new TextView(this);
-            txttab.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            txttab.setText("\t\t\t\t\t\t");
-            tabs[j]= new LinearLayout(this);
-            tabs[j].setOrientation(LinearLayout.HORIZONTAL);
-            tabs[j].addView(txttab);
-            teamNamesInput[j].setText(teamNamesAr[j]);
-            teamNames[j].setTextSize(18);
-            tabs[j].addView(teamNames[j]);
-            teamNamesInput[j].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            tabs[j].addView(teamNamesInput[j]);
-            llTeamNames.addView(tabs[j]);
 
-            //TextView txttab2=new TextView(this);
-            //txttab2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            //txttab2.setText("\t\t\t\t\t\t");
-            //LinearLayout lltemp2 = new LinearLayout(this);
-            //lltemp2.setOrientation(LinearLayout.HORIZONTAL);
-            //lltemp2.addView(txttab2);
-
-            //llTeamNames.addView(lltemp2);
-
-        }
+       initializeViews();
         //Setting settings according to file
         switch (mode) {
             case 0:
@@ -140,12 +125,16 @@ public class Settings extends Activity {
         } else {
             txtSkip.setText("-1 Team");
         }
+
+
+
     }
 
     /**
      * Reads settings from file. (same file can be used in other activities).
      */
     public void getValues() {
+
         SharedPreferences sharedPref = getSharedPreferences("userSettings", Context.MODE_PRIVATE);
         teams = sharedPref.getInt("teams", 2);
         realTime = sharedPref.getInt("realTime", 30);
@@ -154,8 +143,11 @@ public class Settings extends Activity {
         mode = sharedPref.getInt("mode", -1);
         maxRounds = sharedPref.getInt("maxRounds", MAXMAXROUNDS / 2);
         goalRounds = sharedPref.getInt("goalRounds", MAXGOALROUNDS / 2);
+       Random rnd = new Random();
         for (int i = 0; i < MAXTEAMS; i++) {
-            teamNamesAr[i] = sharedPref.getString("team" + i, teamNamesAr[i]);
+           teamNamesAr[i] = sharedPref.getString("team" + i, teamNamesAr[i]);
+           colors[i]=sharedPref.getInt("colors" + i, Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
+           selectedColors[i]=sharedPref.getInt("teamColor" + i,i);
         }
     }
 
@@ -175,6 +167,9 @@ public class Settings extends Activity {
         for (int i = 0; i < MAXTEAMS; i++) {
             String nameOfTeam = teamNamesInput[i].getText().toString();
             editor.putString("team" + i, nameOfTeam);
+           editor.putInt("colors" + i, colors[i]);
+           editor.putInt("teamColor" + i,  selectedColors[i]);
+
         }
         editor.putInt("mode", mode);//done
         editor.apply();
@@ -275,23 +270,7 @@ public class Settings extends Activity {
             teams = 2;
         }
         txtTeams.setText(teams + "");
-        llTeamNames.removeAllViews();
-        //llTeamNames.addView(temp);
-        for (int j = 0; j < teams; j++) {
-            TextView txttab=new TextView(this);
-            txttab.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            txttab.setText("\t\t\t\t\t\t");
-            tabs[j].removeAllViews();
-            tabs[j]= new LinearLayout(this);
-            tabs[j].setOrientation(LinearLayout.HORIZONTAL);
-            tabs[j].addView(txttab);
-            teamNamesInput[j].setText(teamNamesAr[j]);
-            teamNames[j].setTextSize(18);
-            tabs[j].addView(teamNames[j]);
-            teamNamesInput[j].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            tabs[j].addView(teamNamesInput[j]);
-            llTeamNames.addView(tabs[j]);
-        }
+        drawPlayers();
     }
 
     public void increaseTeamOnClick(View v) {
@@ -300,26 +279,8 @@ public class Settings extends Activity {
             teams = MAXTEAMS;
         }
         txtTeams.setText(teams + "");
-        llTeamNames.removeAllViews();
-        //llTeamNames.addView(temp);
-        for (int j = 0; j < teams; j++) {
-            TextView txttab=new TextView(this);
-            txttab.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            txttab.setText("\t\t\t\t\t\t");
-            if(tabs[j]==null){
-                tabs[j]=new LinearLayout(this);
-            }
-            tabs[j].removeAllViews();
-            tabs[j]= new LinearLayout(this);
-            tabs[j].setOrientation(LinearLayout.HORIZONTAL);
-            tabs[j].addView(txttab);
-            teamNamesInput[j].setText(teamNamesAr[j]);
-            teamNames[j].setTextSize(18);
-            tabs[j].addView(teamNames[j]);
-            teamNamesInput[j].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            tabs[j].addView(teamNamesInput[j]);
-            llTeamNames.addView(tabs[j]);
-        }
+        drawPlayers();
+
     }
 
     public void increaseTimeOnClick(View v) {
@@ -392,4 +353,71 @@ public class Settings extends Activity {
             txtWrong.setText("-1 Team");
         }
     }
+
+    public void initializeViews(){
+
+      colorsLL=new LinearLayout[MAXTEAMS];
+      for (int j = 0; j < MAXTEAMS; j++) {
+         TextView txttab=new TextView(this);
+         txttab.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+         txttab.setText("\t\t\t\t\t\t");
+         tabs[j]= new LinearLayout(this);
+         tabs[j].setOrientation(LinearLayout.HORIZONTAL);
+         tabs[j].addView(txttab);
+         teamNamesInput[j].setText(teamNamesAr[j]);
+         teamNames[j].setTextSize(18);
+         tabs[j].addView(teamNames[j]);
+         teamNamesInput[j].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+         tabs[j].addView(teamNamesInput[j]);
+         colorsLL[j]= new LinearLayout(this);
+         colorsLL[j].setOrientation(LinearLayout.HORIZONTAL);
+         for(int i=0;i<MAXTEAMS;i++) {
+            ImageButton r = new ImageButton(this);
+            r.setBackgroundResource(R.drawable.circle_ball);
+            GradientDrawable sd = (GradientDrawable) r.getBackground().mutate();
+            sd.setColor(colors[i]);
+            final int index = i;
+            final int team = j;
+            if(selectedColors[j]==i){
+               ((GradientDrawable) r.getBackground()).setStroke(5, Color.BLACK, 0, 0);
+            }
+            r.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                  int myTeam = team;
+                  int myIndex = index;
+                  for (int i = 0; i < MAXTEAMS; i++) {
+                     if (selectedColors[i] == index) {
+                        ((GradientDrawable) ((ImageButton) colorViews[i][index]).getBackground()).setStroke(0, Color.BLACK, 0, 0);
+                        selectedColors[i] = selectedColors[myTeam];
+                        ((GradientDrawable) ((ImageButton) colorViews[i][selectedColors[myTeam]]).getBackground()).setStroke(5, Color.BLACK, 0, 0);
+
+
+                        ((GradientDrawable) ((ImageButton) colorViews[myTeam][selectedColors[myTeam]]).getBackground()).setStroke(0, Color.BLACK, 0, 0);
+                        selectedColors[myTeam] = index;
+                        ((GradientDrawable) ((ImageButton) view).getBackground()).setStroke(5, Color.BLACK, 0, 0);
+                        return;
+                     }
+                  }
+                  ((GradientDrawable) ((ImageButton) colorViews[myTeam][selectedColors[myTeam]]).getBackground()).setStroke(0, Color.BLACK, 0, 0);
+                  selectedColors[myTeam] = index;
+                  ((GradientDrawable) ((ImageButton) view).getBackground()).setStroke(5, Color.BLACK, 0, 0);
+               }
+            });
+            colorViews[j][i] = r;
+            colorsLL[j].addView(r);
+         }
+      }
+      drawPlayers();
+   }
+
+    public void drawPlayers(){
+       llTeamNames.removeAllViews();
+       for (int j = 0; j < teams; j++) {
+          llTeamNames.addView(tabs[j]);
+          llTeamNames.addView(colorsLL[j]);
+
+       }
+    }
+
 }
