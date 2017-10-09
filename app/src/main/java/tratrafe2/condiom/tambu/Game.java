@@ -66,20 +66,20 @@ public class Game extends Activity {
 
     //CIRCLES
     View bt1, bt2, bt3, bt4;
-    FrameLayout fr;
+    FrameLayout frameBalls;
     CountDownTimer cdt2;
     View tx;
     View b;
     private float x1, x2, y1, y2;
     static final int MIN_DISTANCE = 150;
     static final int MIN_NEG_DISTANCE = -150;
-    boolean readyToStart=false;
+    boolean readyToStart=false,ballThrowDone=true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        fr = (FrameLayout) findViewById(R.id.frLayout);
+        frameBalls = (FrameLayout) findViewById(R.id.frameBalls);
         getSettings();
         initializeViews();
         initializeVariables();
@@ -158,10 +158,10 @@ public class Game extends Activity {
         pbar.setProgress(60);
         timer.setText("" + realTime);
         console.setText(teamNamesStr[teamPlaying] + "'s turn!");
-        for (int i = 0; i < indicators.length; i++) {
-            indicators[i].setVisibility(View.INVISIBLE);
-        }
-        indicators[teamPlaying].setVisibility(View.VISIBLE);
+        //for (int i = 0; i < indicators.length; i++) {
+        //    indicators[i].setVisibility(View.INVISIBLE);
+        //}
+        //indicators[teamPlaying].setVisibility(View.VISIBLE);
         updateScores();
     }
 
@@ -199,7 +199,7 @@ public class Game extends Activity {
        }
         Scores = new int[NumOfTeams];
         teamBalls = new TextView[NumOfTeams];
-        indicators = new TextView[NumOfTeams];
+        //indicators = new TextView[NumOfTeams];
         teamPlaying = sharedPref.getInt("teamPlaying", 0);
         MAXFILES = sharedPref.getInt("MAXFILES", 13);
         countFiles = sharedPref.getInt("countFiles", 0);
@@ -249,7 +249,7 @@ public class Game extends Activity {
         btnSkip = (Button) findViewById(R.id.btnSkip);
         btnWrong = (Button) findViewById(R.id.btnWrong);
         llTeamNames = (LinearLayout) findViewById(R.id.llteamNames);
-        llindicators = (LinearLayout) findViewById(R.id.llindicators);
+        //llindicators = (LinearLayout) findViewById(R.id.llindicators);
         touchLayout = (LinearLayout) findViewById(R.id.TouchLayout);
         btnCorrect.setEnabled(false);
         btnWrong.setEnabled(false);
@@ -313,32 +313,35 @@ public class Game extends Activity {
             teamBalls[i].setText(Scores[i] + "");
             teamBalls[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-            indicators[i] = new TextView(this);
-            indicators[i].setBackgroundResource(R.drawable.rectangle_shape);
-            indicators[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            indicators[i].setVisibility(View.INVISIBLE);
+            //indicators[i] = new TextView(this);
+            //indicators[i].setBackgroundResource(R.drawable.rectangle_shape);
+            //indicators[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            //indicators[i].setVisibility(View.INVISIBLE);
 
             teamBalls[i].setLayoutParams(lp);
             teamBalls[i].setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-            indicators[i].setLayoutParams(lp);
+            //indicators[i].setLayoutParams(lp);
 
-            fr.addView(teamBalls[i]);
-            llindicators.addView(indicators[i]);
+            frameBalls.addView(teamBalls[i]);
+            //llindicators.addView(indicators[i]);
         }
-        fr.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        frameBalls.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                fr.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                float pos = 1.0f*(fr.getWidth()-teamBalls[0].getWidth()*NumOfTeams) / (2*NumOfTeams);
+                frameBalls.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                float pos = 1.0f*(frameBalls.getWidth()-teamBalls[0].getWidth()*NumOfTeams) / (2*NumOfTeams);
                 float space = teamBalls[0].getWidth() / 2.0f;
+                float ballsY = (teamBalls[0].getHeight()/2.0f)+teamBalls[0].getY();
                 for (int i = 0; i < NumOfTeams; i++) {
                     float myPos=1.0f*(pos+(2*space+2*pos)*i);
                     teamBalls[i].setX(myPos);
+                    teamBalls[i].setY(ballsY);
+
                 }
                ballThrow(teamBalls[teamPlaying]);
             }
         });
-        indicators[teamPlaying].setVisibility(View.VISIBLE);
+        //indicators[teamPlaying].setVisibility(View.VISIBLE);
     }
 
     /**
@@ -409,11 +412,14 @@ public class Game extends Activity {
                 txt5.setText("");
                txtMain.setText("");
                 console.setText("Round " + rounds + ": " + teamNamesStr[teamPlaying] + "'s turn!");
-                for (int i = 0; i < indicators.length; i++) {
+
+                /*
+                    for (int i = 0; i < indicators.length; i++) {
                     indicators[i].setVisibility(View.INVISIBLE);
                 }
+                */
                 ballThrow(teamBalls[teamPlaying]);
-                indicators[teamPlaying].setVisibility(View.VISIBLE);
+                //indicators[teamPlaying].setVisibility(View.VISIBLE);
                 touchLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -561,6 +567,9 @@ public class Game extends Activity {
      * start next team's timer
      */
     public void PauseClick(View v) {
+        if(!ballThrowDone){
+            return;
+        }
         if (cdt != null)
             cdt.cancel();
         btnCorrect.setEnabled(false);
@@ -596,6 +605,9 @@ public class Game extends Activity {
      * Return to main menu
      */
     public void exitClick(View v) {
+        if(!ballThrowDone){
+            return;
+        }
         if (cdt != null)
             cdt.cancel();
         saveValues();
@@ -670,6 +682,7 @@ public class Game extends Activity {
                 ((GradientDrawable ) ((TextView)teamBalls[last]).getBackground()).setStroke(0,Color.BLACK,0,0);
                readyToStart=true;
                txtMain.setText("Tap to START!");
+               ballThrowDone=true;
             }
 
             @Override
@@ -687,14 +700,15 @@ public class Game extends Activity {
     }
 
     public void ballThrow(View v) {
-       readyToStart=false;
+        ballThrowDone=false;
+        readyToStart=false;
         b = v;
         final float oldX=b.getX();
         final float oldY=b.getY();
         if (cdt2 != null)
             cdt2.cancel();
         tx = (View) findViewById(R.id.timerFL);
-        final float finalX=fr.getWidth()/2.0f ;
+        final float finalX=frameBalls.getWidth()/2.0f ;
         cdt2 = new CountDownTimer(100000, 1) {
             float speedX;
             float speed = speedX=10f;
